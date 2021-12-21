@@ -27,7 +27,6 @@ const config = {
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
           editUrl:
             'https://github.com/unvlabs/site/edit/main/blog/',
         },
@@ -48,9 +47,10 @@ const config = {
           src: 'img/logo.svg',
         },
         items: [
+          { to: '/playground', label: 'Playground', position: 'left' },
           {
             type: 'doc',
-            docId: 'introduction',
+            docId: 'tutorial',
             position: 'left',
             label: 'Tutorial',
           },
@@ -94,6 +94,10 @@ const config = {
           {
             title: 'More',
             items: [
+              {
+                label: 'Playground',
+                to: '/playground',
+              },
               {
                 label: 'Blog',
                 to: '/blog',
