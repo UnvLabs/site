@@ -43,7 +43,7 @@ To comment in multiple lines you could insert a # for each line:
 print("Hello, World!")
 ```
 
-Or, not quite as intended, you can use a multiline comment.
+Or, you can use a multiline comment.
 
 **Example**
 ```coffee
