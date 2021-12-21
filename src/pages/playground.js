@@ -9,7 +9,7 @@ export default function Playground() {
   useEffect(() => {
     const getGeneratedPageURL = (js) => {
       const getBlobURL = (code, type) => {
-        const blob = new Blob([js], { type })
+        const blob = new Blob([code], { type })
         return URL.createObjectURL(blob)
       }
 
