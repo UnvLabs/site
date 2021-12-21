@@ -15,7 +15,7 @@ function HomepageHeader() {
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
           <Link
-            className="button button--primary button--lg"
+            className="button button--success button--lg"
             to="/docs/introduction">
             Why Unv?
           </Link>
