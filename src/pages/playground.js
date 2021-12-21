@@ -88,7 +88,7 @@ export default function Playground() {
     <Layout>
       <main ref={parent}>
       </main>
-      <iframe ref={preview}></iframe>
+      <iframe ref={preview} className="preview"></iframe>
     </Layout>
   );
 }
