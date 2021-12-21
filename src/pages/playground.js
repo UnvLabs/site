@@ -5,8 +5,7 @@ import React, { useRef, useEffect, useState } from 'react'
 
 export default function Playground() {
   const parent = useRef();
-  const [src, setSrc] = useState('')
-
+  const preview = useRef()
   useEffect(() => {
     const getGeneratedPageURL = (js) => {
       const getBlobURL = (code, type) => {
@@ -45,7 +44,7 @@ export default function Playground() {
     let update = setInterval(() => {
       if (changed) {
         changed = false
-        setSrc(getGeneratedPageURL(editor.state.doc.toString()))
+        preview.current.src = getGeneratedPageURL(editor.state.doc.toString())
       }
     }, 1000)
 
@@ -58,7 +57,7 @@ export default function Playground() {
     <Layout>
       <main ref={parent}>
       </main>
-      <iframe src={src}></iframe>
+      <iframe ref={preview}></iframe>
     </Layout>
   );
 }
