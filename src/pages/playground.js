@@ -3,32 +3,32 @@ import { python } from "@codemirror/lang-python"
 import Layout from '@theme/Layout';
 import React, { useRef, useEffect, useState } from 'react'
 
-const getGeneratedPageURL = (js) => {
-  const getBlobURL = (code, type) => {
-    const blob = new Blob([js], { type })
-    return URL.createObjectURL(blob)
-  }
-
-  const jsURL = getBlobURL(js, 'text/javascript')
-
-  const source = `
-    <html>
-      <head>
-        ${js && `<script src="${jsURL}"></script>`}
-      </head>
-      <body>
-      </body>
-    </html>
-  `
-
-  return getBlobURL(source, 'text/html')
-}
-
 export default function Playground() {
   const parent = useRef();
   const [src, setSrc] = useState('')
 
   useEffect(() => {
+    const getGeneratedPageURL = (js) => {
+      const getBlobURL = (code, type) => {
+        const blob = new Blob([js], { type })
+        return URL.createObjectURL(blob)
+      }
+
+      const jsURL = getBlobURL(js, 'text/javascript')
+
+      const source = `
+        <html>
+          <head>
+            ${js && `<script src="${jsURL}"></script>`}
+          </head>
+          <body>
+          </body>
+        </html>
+      `
+
+      return getBlobURL(source, 'text/html')
+    }
+
     let changed;
 
     let editor = new EditorView({
@@ -45,7 +45,7 @@ export default function Playground() {
     let update = setInterval(() => {
       if (changed) {
         changed = false
-        setSrc(editor.state.doc.toString())
+        setSrc(getGeneratedPageURL(editor.state.doc.toString()))
       }
     }, 1000)
 
@@ -58,7 +58,7 @@ export default function Playground() {
     <Layout>
       <main ref={parent}>
       </main>
-      <iframe src={getGeneratedPageURL(src)}></iframe>
+      <iframe src={src}></iframe>
     </Layout>
   );
 }
