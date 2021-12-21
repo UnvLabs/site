@@ -50,7 +50,7 @@ const config = {
           { to: '/playground', label: 'Playground', position: 'left' },
           {
             type: 'doc',
-            docId: 'tutorial/getting-started',
+            docId: 'tutorial/introduction',
             position: 'left',
             label: 'Tutorial',
           },
