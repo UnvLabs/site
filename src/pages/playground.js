@@ -1,7 +1,7 @@
 import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup"
 import { python } from "@codemirror/lang-python"
 import Layout from '@theme/Layout';
-import { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 
 const getGeneratedPageURL = (js) => {
   const getBlobURL = (code, type) => {
