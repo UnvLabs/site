@@ -90,6 +90,13 @@ function compile(input) {
 
     let editor = new EditorView({
       state: EditorState.create({
+        doc: `var unv = true
+var awesome = true
+if unv == awesome
+    console.log('Unv is awesome')
+else
+  console.log('Unv is not awesome')
+`,
         extensions: [basicSetup,
           python(),
           EditorView.updateListener.of((v) => {
