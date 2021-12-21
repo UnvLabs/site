@@ -14,8 +14,6 @@ export default function Playground() {
         return URL.createObjectURL(blob)
       }
 
-      const jsURL = getBlobURL(js, 'text/javascript')
-
       const source = `
         <html>
           <head>
@@ -51,7 +49,7 @@ export default function Playground() {
                 }
               });
             </script>
-            ${js && `<script src="${jsURL}"></script>`}
+            ${js && `<script type="module">${js}</script>`}
           </body>
         </html>
       `
