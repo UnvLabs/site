@@ -5,6 +5,35 @@ import React, { useRef, useEffect, useState } from 'react'
 import './playground.css'
 
 export default function Playground() {
+function compile(input) {
+  input = input.replace(
+    /("(?:\\["\\]|[^"\\])*"|'(?:\\['\\]|[^'\\])*')|###[^]*?###|#.*/gm,
+    ([, string]) => (string ? string.replace('\n', '\\n') : '')
+  );
+  let lines = input.split('\n');
+  let comment = false;
+  let indents = [];
+  let output = '';
+  for (let line of lines) {
+    let statement = line.match(
+      /^(\s*)(if|else|switch|try|catch|(?:async\s+)?function\*?|class|do|while|for)\s+(.+)/
+    );
+    if (statement) {
+      let [, spaces, name, args] = statement;
+      indents.unshift(spaces.length);
+      output += `${spaces}${name} ${/function|try|class/.test(name) ? args : `(${args})`} {\n`;
+    } else {
+      let spaces = line.match(/^\s*/)[0].length;
+      for (let indent of [...indents]) {
+        if (indent < spaces) break;
+        output += `${' '.repeat(indent)}}\n`;
+        indents.shift();
+      }
+      output += line + '\n';
+    }
+  }
+  return output;
+}
   const parent = useRef();
   const preview = useRef()
   useEffect(() => {
@@ -73,7 +102,7 @@ export default function Playground() {
     let update = setInterval(() => {
       if (changed) {
         changed = false
-        preview.current.src = getGeneratedPageURL(editor.state.doc.toString())
+        preview.current.src = getGeneratedPageURL(compile(editor.state.doc.toString()))
       }
     }, 1000)
 
