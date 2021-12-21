@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'Unv language',
+  tagline: 'Universal programming language',
   url: 'https://unv.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'warn',
