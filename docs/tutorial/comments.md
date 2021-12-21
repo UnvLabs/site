@@ -11,7 +11,7 @@ sidebar_position: 2
 Comments starts with a #, and Unv will ignore them:
 
 **Example**
-```py
+```py {1}
 #This is a comment
 print("Hello, World!")
 ```
@@ -26,7 +26,7 @@ print("Hello, World!") #This is a comment
 A comment does not have to be text that explains the code, it can also be used to prevent Unv from executing code:
 
 **Example**
-```py
+```py {1}
 #print("Hello, World!")
 print("Cheers, Mate!")
 ```
@@ -36,7 +36,7 @@ print("Cheers, Mate!")
 To comment in multiple lines you could insert a # for each line:
 
 **Example**
-```py
+```py {1-3}
 #This is a comment
 #written in
 #more than just one line
@@ -46,7 +46,7 @@ print("Hello, World!")
 Or, you can use a multiline comment.
 
 **Example**
-```coffee
+```coffee {1-5}
 ###
 This is a comment
 written in
