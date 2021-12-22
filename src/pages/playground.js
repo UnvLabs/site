@@ -38,7 +38,7 @@ function compile(input) {
 function Editor(props) {
   const parent = useRef();
   useEffect(() => {
-
+    let changed = false
     let editor = new EditorView({
       state: EditorState.create({
         doc: `var unv = true
@@ -52,37 +52,30 @@ else
           basicSetup,
           python(),
           EditorView.updateListener.of((v) => {
-            if (v.docChanged && props.onChange)
-              props.onChange(editor.state.doc.toString())
+            if (v.docChanged)
+              changed = true
           }),
         ],
       }),
       parent: parent.current,
     });
-
-    return editor.destroy
+    
+    let interval = setInterval(() => {
+      if (changed && props.onChange) {
+        props.onChange(editor.state.doc.toString())
+        changed = false
+      }
+    }, 1000)
+    return () => {
+      clearInterval(interval)
+      editor.destroy()
+    }
   });
   return <div ref={parent} />
 }
 export default function Playground() {
   let [code, setCode] = useState('')
   let [logs, setLogs] = useState([])
-  let [hacked, setHacked] = useState(false)
-
-  useEffect(() => {
-    if (!hacked) {
-      let real = window.console;
-      let domsole = {}
-      window.console = new Proxy(console, {
-        get: (target, property) => {
-          return (...args) => {
-            return real[property](...args)
-          }
-        }
-      })
-      setHacked(true)
-    }
-  })
 
   return (
     <Layout>
