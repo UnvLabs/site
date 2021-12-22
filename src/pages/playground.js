@@ -44,9 +44,9 @@ function Editor(props) {
         doc: `var unv = true
 var awesome = true
 if unv == awesome
-    console.log('Unv is awesome')
+    print('Unv is awesome')
 else
-    console.log('Unv is not awesome')
+    print('Unv is not awesome')
 `,
         extensions: [
           basicSetup,
@@ -74,7 +74,11 @@ else
   return <div ref={parent} />
 }
 export default function Playground() {
-
+  let [logs, setLogs] = useState([])
+  useEffect(() => {
+    window.print = (...args) => 
+        setLogs([...logs, (<code key={ logs.length }>args.join(' ')</code>)])
+  })
   return (
     <Layout>
       <div className={styles.playground}>
@@ -86,6 +90,7 @@ export default function Playground() {
           }
         }}/>
         <div className={styles.preview}>
+          {logs}
         </div>
       </div>
     </Layout>
