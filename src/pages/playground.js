@@ -76,7 +76,7 @@ export default function Playground() {
       window.console = new Proxy(console, {
         get: (target, property) => {
           return (...args) => {
-            return target[property](...args)
+            return real[property](...args)
           }
         }
       })
@@ -87,7 +87,7 @@ export default function Playground() {
   return (
     <Layout>
       <div className={styles.playground}>
-        <Editor/>
+        <Editor onChange={code => setCode(code)}/>
         <div className={styles.preview}>
         </div>
       </div>
