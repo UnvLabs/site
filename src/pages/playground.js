@@ -77,7 +77,12 @@ export default function Playground() {
   let [logs, setLogs] = useState([])
   useEffect(() => {
     window.print = (...args) => 
-        setLogs([...logs, (<code key={ logs.length }>args.join(' ')</code>)])
+        setLogs([
+          ...logs,
+          (<pre key={ logs.length }>
+            <code>{args.join}(' ')</code>
+          </pre>)
+        ])
   })
   return (
     <Layout>
