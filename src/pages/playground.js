@@ -65,7 +65,7 @@ else
         props.onChange(editor.state.doc.toString())
         changed = false
       }
-    }, 1000)
+    }, 500)
     return () => {
       clearInterval(interval)
       editor.destroy()
@@ -74,13 +74,17 @@ else
   return <div ref={parent} />
 }
 export default function Playground() {
-  let [code, setCode] = useState('')
-  let [logs, setLogs] = useState([])
 
   return (
     <Layout>
       <div className={styles.playground}>
-        <Editor onChange={code => setCode(code)}/>
+        <Editor onChange={code => {
+          let fn = new Function(compile(code))
+          try {
+            fn()
+          } catch (e) {
+          }
+        }}/>
         <div className={styles.preview}>
         </div>
       </div>
