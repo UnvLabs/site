@@ -87,7 +87,7 @@ export default function Playground() {
   return (
     <Layout>
       <div className={styles.playground}>
-        <Editor onChange={code => setCode(code)} />
+        <Editor/>
         <div className={styles.preview}>
         </div>
       </div>
