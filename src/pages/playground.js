@@ -3,6 +3,7 @@ import { python } from "@codemirror/lang-python";
 import Layout from "@theme/Layout";
 import React, { useRef, useEffect, useState } from "react";
 import styles from "./playground.module.css";
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 function compile(input) {
   input = input.replace(
@@ -37,6 +38,7 @@ function compile(input) {
 
 function Editor(props) {
   const parent = useRef();
+
   useEffect(() => {
     let changed = false
     let editor = new EditorView({
@@ -87,13 +89,16 @@ export default function Playground() {
   return (
     <Layout>
       <div className={styles.playground}>
-        <Editor onChange={code => {
+        <BrowserOnly>
+        {() => 
+        (<Editor onChange={code => {
           let fn = new Function(compile(code))
           try {
             fn()
           } catch (e) {
           }
-        }}/>
+        }}/>)}
+        </BrowserOnly>
         <div className={styles.preview}>
           {logs}
         </div>
