@@ -8,7 +8,7 @@ export default function Playground() {
 function compile(input) {
   input = input.replace(
     /("(?:\\["\\]|[^"\\])*"|'(?:\\['\\]|[^'\\])*')|###[^]*?###|#.*/gm,
-    ([, string]) => (string ? string.replace('\n', '\\n') : '')
+    (_, string) => (string ? string.replace('\n', '\\n') : '')
   );
   let lines = input.split('\n');
   let comment = false;
@@ -34,6 +34,7 @@ function compile(input) {
   }
   return output;
 }
+
   const parent = useRef();
   const preview = useRef()
   useEffect(() => {
@@ -95,7 +96,7 @@ var awesome = true
 if unv == awesome
     console.log('Unv is awesome')
 else
-  console.log('Unv is not awesome')
+    console.log('Unv is not awesome')
 `,
         extensions: [basicSetup,
           python(),
