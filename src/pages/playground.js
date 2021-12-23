@@ -50,7 +50,7 @@ export default function Playground() {
       }
       setMounted(true)
     }
-  }, [])
+  })
   
   return (
     <Layout>
