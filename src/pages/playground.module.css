@@ -51,6 +51,10 @@
   float: left;
   min-width: 100%;
   padding: var(--ifm-pre-padding);
+  background-color: transparent;
+  border: none;
+  vertical-align: middle;
+  line-height: inherit;
 }
 
 .codeEditor {
@@ -61,8 +65,6 @@
   height: 100%;
   caret-color: #000;
   color: transparent;
-  background-color: transparent;
-  border: 0;
 }
 
 @media print {
