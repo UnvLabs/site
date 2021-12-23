@@ -113,7 +113,7 @@ function Editor(props) {
               <textarea className={styles.codeEditor} key={"static"} onChange={event => {
                 const {highlightLines, code} = parseLines(event.target.value, undefined, 'python');
                 setCode([highlightLines, code])
-              }/>
+              }}/>
             </pre>
             <button
               type="button"
