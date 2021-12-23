@@ -159,16 +159,13 @@ export default function Playground() {
   return (
     <Layout>
       <div className={styles.playground}>
-        <BrowserOnly>
-        {() => 
-        (<Editor onChange={code => {
+        <Editor onChange={code => {
           let fn = new Function(compile(code))
           try {
             fn()
           } catch (e) {
           }
-        }}/>)}
-        </BrowserOnly>
+        }}/>
         <div className={styles.preview}>
           {logs}
         </div>
