@@ -6,7 +6,6 @@ import copy from 'copy-text-to-clipboard';
 import Translate, {translate} from '@docusaurus/Translate';
 import {
   useThemeConfig,
-  parseCodeBlockTitle,
   parseLanguage,
   parseLines,
   ThemeClassNames,
@@ -78,11 +77,6 @@ function Editor(props) {
             styles.codeBlockContainer,
             ThemeClassNames.common.codeBlock,
           )}>
-          {codeBlockTitle && (
-            <div style={style} className={styles.codeBlockTitle}>
-              {codeBlockTitle}
-            </div>
-          )}
           <div className={clsx(styles.codeBlockContent, language)}>
             <pre
               tabIndex={0}
