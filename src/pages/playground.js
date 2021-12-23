@@ -50,7 +50,7 @@ function Editor(props) {
 
   const [showCopied, setShowCopied] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [code, setCode] = useState('');
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     setMounted(true);
@@ -112,7 +112,7 @@ function Editor(props) {
                   );
                 })}
               </code>
-              <textarea className={styles.codeEditor} key={"static"} onChange={event => setCode(event.target.value)}/>
+              <textarea className={styles.codeEditor} key={"static"} onChange={event => setContent(event.target.value)}/>
             </pre>
             <button
               type="button"
