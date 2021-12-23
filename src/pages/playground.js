@@ -38,7 +38,12 @@ function compile(input) {
 
 function CodeEditor() {
   let parent = createRef()
+  let [mouned, setMounted] = useState(false)
   useEffect(() => {
+    if (mouned)
+      return
+    setMounted(true)
+    window.print = console.log()
     let editor = new EditorView({
       state: EditorState.create({
         doc: `print('Hello World!)`,
