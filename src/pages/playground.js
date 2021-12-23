@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import Layout from '@theme/Layout';
 import Editor from 'react-simple-code-editor';
 import Highlight, { Prism } from 'prism-react-renderer';
 import styles from "./playground.module.css";
@@ -42,6 +43,7 @@ export default function Playground() {
 
   return (
     <Layout>
+      <h1>Playground</h1>
       <div className={styles.playground}>
         <Editor
           value={code}
