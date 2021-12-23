@@ -35,7 +35,7 @@ function compile(input) {
   return output;
 }
 
-export default function CodeEditor() {
+function CodeEditor() {
   return <BrowserOnly fallback={<div>Loading...</div>}>
     {() => {
       let parent = createRef()
