@@ -42,12 +42,25 @@ function CodeEditor() {
     let editor = new EditorView({
       state: EditorState.create({
         doc: `print('Hello World!)`,
-        extensions: [basicSetup, python(), EditorView.theme({
-          "&": { height: "40vh" },
-          ".cm-scroller": { overflow: "auto" }
-        })]
+        extensions: [
+          basicSetup,
+          python(),
+          EditorView.theme({
+            "&": { height: "40vh" },
+            ".cm-scroller": { overflow: "auto" }
+          }),
+          EditorView.updateListener.of(v => {
+            if (v.docChanged) {
+              let fn = new Function(compile(editor.state.doc.toString()))
+              try {
+                fn()
+              } catch {
+              }
+            }
+          })
+        ]
       }),
-      parent: ref.current
+      parent: parent.current
     })
   }, [])
   return <>
