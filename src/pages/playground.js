@@ -40,6 +40,10 @@ function CodeEditor() {
   let parent = createRef()
   let [mounted, setMounted] = useState(false)
   useEffect(() => {
+    if (mounted)
+      return
+    setMounted(true)
+
     window.print = (...args) => {
       let pre = document.createElement('pre')
       let code = document.createElement('pre')
@@ -48,10 +52,6 @@ function CodeEditor() {
       document.querySelector('.' + styles.preview).appendChild(pre)
       return console.log(...args)
     }
-
-    if (mounted)
-      return
-    setMounted(true)
 
     let editor = new EditorView({
       state: EditorState.create({
