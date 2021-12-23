@@ -67,7 +67,7 @@ export default function Playground() {
         </Fragment>
       )}
     </Highlight>
-  );}
+  )}
         />
         <div className={styles.preview}>
           {logs}
