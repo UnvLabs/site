@@ -38,24 +38,22 @@ function compile(input) {
 
 function CodeEditor() {
   let parent = createRef()
+  let logs = createRef()
   let [mounted, setMounted] = useState(false)
-  let [logs, setLogs] = useState([])
   useEffect(() => {
-    window.print = (...args) => {
-      console.log(logs)
-      setLogs([
-        ...logs,
-        (<pre key={logs.length}>
-          <code>
-            {args.join(' ')}
-          </code>
-        </pre>)
-      ])
-      return console.log(...args)
-    }
     if (mounted)
       return
     setMounted(true)
+
+    window.print = (...args) => {
+      let pre = document.createElement('pre')
+      let code = document.createElement('pre')
+      code.textContent = args.join(' ')
+      pre.appendChild(code)
+      logs.current.appendChild(pre)
+      return console.log(...args)
+    }
+
     let editor = new EditorView({
       state: EditorState.create({
         doc: `if 'Unv is awesome!'
@@ -70,6 +68,7 @@ function CodeEditor() {
           }),
           EditorView.updateListener.of(v => {
             if (v.docChanged) {
+              logs.current.textContent = ''
               let fn = new Function(compile(editor.state.doc.toString()))
               try {
                 fn()
@@ -84,7 +83,7 @@ function CodeEditor() {
   }, [])
   return <>
     <div ref={parent}></div>
-    <div className={styles.preview}>{logs}</div>
+    <div className={styles.preview} ref={logs}></div>
   </>
 }
 
