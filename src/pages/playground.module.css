@@ -8,6 +8,15 @@
   border: 2px solid gray;
 }
 
+.wrapper {
+  position: relative;
+}
+
 .codeEditor * {
   color: transparent;
+  position: absolute;
+}
+
+.codeView {
+  position: absolute;
 }
