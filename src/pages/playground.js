@@ -36,14 +36,22 @@ function compile(input) {
 }
 
 export default function Playground() {
-  const editor = createRef()
+  useEffect(() => {
+    let editor = document.querySelector('.code-editor')
+    editor.contenteditable = true
+    return () => {
+      
+    }
+  }, [])
 
   return (
     <Layout>
       <h1>Playground</h1>
       <div className={styles.playground}>
-        <CodeBlock> </CodeBlock>
-        <CodeBlock ref={editor}> </CodeBlock>
+        <div>
+          <CodeBlock> </CodeBlock>
+          <CodeBlock> </CodeBlock>
+        </div>
         <div className={styles.preview}></div>
       </div>
     </Layout>
