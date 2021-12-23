@@ -1,8 +1,7 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useState, createRef } from "react";
 import Layout from "@theme/Layout";
-import Highlight, { Prism } from "prism-react-renderer";
+import CodeBlock from "@theme/CodeBlock";
 import styles from "./playground.module.css";
-import usePrismTheme from "@theme/hooks/usePrismTheme";
 
 function compile(input) {
   input = input.replace(
@@ -37,28 +36,15 @@ function compile(input) {
 }
 
 export default function Playground() {
-  const [code, setCode] = useState(``);
-  const [mounted, setMounted] = useState(false);
-  const logger = useRef();
+  const editor = createRef()
 
   return (
     <Layout>
       <h1>Playground</h1>
       <div className={styles.playground}>
-        <div
-          contentEditable={true}
-          className={styles.editor}
-          onPaste={() => {
-            e.preventDefault();
-
-            var text = (e.originalEvent || e).clipboardData.getData(
-              "text/plain"
-            );
-
-            document.execCommand("insertHTML", false, text);
-          }}
-        ></div>
-        <div className={styles.preview} ref={logger}></div>
+        <CodeBlock ref={editor}/>
+        <CodeBlock ref={editor}/>
+        <div className={styles.preview}></div>
       </div>
     </Layout>
   );
