@@ -41,9 +41,6 @@ function CodeEditor() {
   let [mounted, setMounted] = useState(false)
   let [logs, setLogs] = useState([])
   useEffect(() => {
-    if (mounted)
-      return
-    setMounted(true)
     window.print = (...args) => {
       setLogs([
         ...logs,
@@ -55,6 +52,9 @@ function CodeEditor() {
       ])
       return console.log(...args)
     }
+    if (mounted)
+      return
+    setMounted(true)
     let editor = new EditorView({
       state: EditorState.create({
         doc: `print('Hello World!')`,
