@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState, createRef } from "react";
 import Layout from "@theme/Layout";
-import CodeBlock from "@theme/CodeBlock";
+import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup"
+import { python } from "@codemirror/lang-python"
 import styles from "./playground.module.css";
 
 function compile(input) {
@@ -19,9 +20,8 @@ function compile(input) {
     if (statement) {
       let [, spaces, name, args] = statement;
       indents.unshift(spaces.length);
-      output += `${spaces}${name} ${
-        /function|try|class/.test(name) ? args : `(${args})`
-      } {\n`;
+      output += `${spaces}${name} ${/function|try|class/.test(name) ? args : `(${args})`
+        } {\n`;
     } else {
       let spaces = line.match(/^\s*/)[0].length;
       for (let indent of [...indents]) {
@@ -35,23 +35,33 @@ function compile(input) {
   return output;
 }
 
-export default function Playground() {
-  useEffect(() => {
-    let editor = document.querySelector("." + styles.codeEditor)
-    editor.contentEditable = true
-    return () => {
-      
-    }
-  }, [])
+export default function CodeEditor() {
+  return <BrowserOnly fallback={<div>Loading...</div>}>
+    {() => {
+      let parent = createRef()
+      useEffect(() => {
+        let editor = new EditorView({
+          state: EditorState.create({
+            doc: `print('Hello World!)`,
+            extensions: [basicSetup, python(), EditorView.theme({
+              "&": { height: "40vh" },
+              ".cm-scroller": { overflow: "auto" }
+            })]
+          }),
+          parent: ref.current
+        })
+      }, [])
+      return <div ref={parent}></div>
+    }}
+  </BrowserOnly>
+}
 
+export default function Playground() {
   return (
     <Layout>
       <h1>Playground</h1>
       <div className={styles.playground}>
-        <div className={styles.wrapper}>
-          <CodeBlock className={styles.codeView}> </CodeBlock>
-          <CodeBlock className={styles.codeEditor}> </CodeBlock>
-        </div>
+        <CodeEditor />
         <div className={styles.preview}></div>
       </div>
     </Layout>
