@@ -112,8 +112,8 @@ function Editor(props) {
                   );
                 })}
               </code>
+              <textarea className={styles.codeEditor} key={"static"} onChange={event => setCode(event.target.value)}/>
             </pre>
-            <textarea className={styles.codeEditor} key={"static"} onChange={event => setCode(event.target.value)}/>
             <button
               type="button"
               aria-label={translate({
