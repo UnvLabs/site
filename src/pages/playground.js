@@ -50,8 +50,10 @@ function CodeEditor() {
       parent: ref.current
     })
   }, [])
-  return <div ref={parent}></div>
-
+  return <>
+    <div ref={parent}></div>
+    <div className={styles.preview}></div>
+  </>
 }
 
 export default function Playground() {
@@ -61,10 +63,9 @@ export default function Playground() {
       <div className={styles.playground}>
         <BrowserOnly fallback={<div>Loading...</div>}>
           {() => {
-            <CodeEditor />
+            return <CodeEditor />
           }}
         </BrowserOnly>
-        <div className={styles.preview}></div>
       </div>
     </Layout>
   );
