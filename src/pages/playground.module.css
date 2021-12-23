@@ -8,9 +8,6 @@
   border: 2px solid gray;
 }
 
-.codeEditor {
-  margin-bottom: var(--ifm-leading);
-  border-radius: var(--ifm-global-radius);
-  box-shadow: var(--ifm-global-shadow-lw);
-  border-radius: var(--ifm-global-radius);
+.codeEditor * {
+  color: transparent;
 }
