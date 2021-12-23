@@ -68,7 +68,7 @@ function CodeEditor() {
           }),
           EditorView.updateListener.of(v => {
             if (v.docChanged) {
-              logs.current.textContent = ''
+              logs.current?.textContent = ''
               let fn = new Function(compile(editor.state.doc.toString()))
               try {
                 fn()
