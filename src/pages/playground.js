@@ -38,7 +38,6 @@ function compile(input) {
 
 function CodeEditor() {
   let parent = createRef()
-  let logs = createRef()
   let [mounted, setMounted] = useState(false)
   useEffect(() => {
     window.print = (...args) => {
@@ -46,7 +45,7 @@ function CodeEditor() {
       let code = document.createElement('pre')
       code.textContent = args.join(' ')
       pre.appendChild(code)
-      logs.current.appendChild(pre)
+      document.querySelector('.' + styles.preview).appendChild(pre)
       return console.log(...args)
     }
 
@@ -69,7 +68,7 @@ function CodeEditor() {
           }),
           EditorView.updateListener.of(v => {
             if (v.docChanged) {
-              if (logs.current) logs.current.textContent = ''
+              document.querySelector('.' + styles.preview).textContent = ''
               try {
                 let fn = new Function(compile(editor.state.doc.toString()))
                 fn()
@@ -84,7 +83,7 @@ function CodeEditor() {
   }, [])
   return <>
     <div ref={parent}></div>
-    <div ref={logs} className={styles.preview} ></div>
+    <div className={styles.preview} ></div>
   </>
 }
 
