@@ -38,7 +38,7 @@ function compile(input) {
 export default function Playground() {
   useEffect(() => {
     let editor = document.querySelector("." + styles.codeEditor)
-    editor.contenteditable = true
+    editor.contentEditable = true
     return () => {
       
     }
@@ -48,8 +48,8 @@ export default function Playground() {
     <Layout>
       <h1>Playground</h1>
       <div className={styles.playground}>
-        <div>
-          <CodeBlock> </CodeBlock>
+        <div className={styles.wrapper}>
+          <CodeBlock className={styles.codeView}> </CodeBlock>
           <CodeBlock className={styles.codeEditor}> </CodeBlock>
         </div>
         <div className={styles.preview}></div>
