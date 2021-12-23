@@ -58,6 +58,7 @@ function CodeEditor() {
       state: EditorState.create({
         doc: `if 'Unv is awesome!'
     print('Hello World!')
+# keep editing for live results
 `,
         extensions: [
           basicSetup,
