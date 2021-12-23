@@ -67,6 +67,11 @@
   color: transparent;
 }
 
+.codeEditor::selection {
+  caret-color: #000;
+  color: transparent;
+}
+
 @media print {
   .codeBlockLines {
     white-space: pre-wrap;
