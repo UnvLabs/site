@@ -38,12 +38,23 @@ function compile(input) {
 
 function CodeEditor() {
   let parent = createRef()
-  let [mouned, setMounted] = useState(false)
+  let [mounted, setMounted] = useState(false)
+  let [logs, setLogs] = useState(false)
   useEffect(() => {
-    if (mouned)
+    if (mounted)
       return
     setMounted(true)
-    window.print = console.log()
+    window.print = (...args) => {
+      setLogs([
+        ...logs,
+        (<pre key={logs.length}>
+          <code>
+            {args.join(' ')}
+          </code>
+        </pre>)
+      ])
+      return console.log(...args)
+    }
     let editor = new EditorView({
       state: EditorState.create({
         doc: `print('Hello World!')`,
@@ -70,7 +81,7 @@ function CodeEditor() {
   }, [])
   return <>
     <div ref={parent}></div>
-    <div className={styles.preview}></div>
+    <div className={styles.preview}>{logs}</div>
   </>
 }
 
