@@ -1,9 +1,18 @@
-import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup";
-import { python } from "@codemirror/lang-python";
 import Layout from "@theme/Layout";
-import React, { useRef, useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
+import clsx from 'clsx';
+import Highlight, {defaultProps, Language} from 'prism-react-renderer';
+import copy from 'copy-text-to-clipboard';
+import Translate, {translate} from '@docusaurus/Translate';
+import {
+  useThemeConfig,
+  parseCodeBlockTitle,
+  parseLanguage,
+  parseLines,
+  ThemeClassNames,
+} from '@docusaurus/theme-common';
+import usePrismTheme from '@theme/hooks/usePrismTheme';
 import styles from "./playground.module.css";
-import BrowserOnly from '@docusaurus/BrowserOnly';
 
 function compile(input) {
   input = input.replace(
@@ -37,44 +46,104 @@ function compile(input) {
 }
 
 function Editor(props) {
-  const parent = useRef();
+  const {prism} = useThemeConfig();
+
+  const [showCopied, setShowCopied] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [code, setCode] = useState('');
 
   useEffect(() => {
-    let changed = false
-    let editor = new EditorView({
-      state: EditorState.create({
-        doc: `var unv = true
-var awesome = true
-if unv == awesome
-    print('Unv is awesome')
-else
-    print('Unv is not awesome')
-`,
-        extensions: [
-          basicSetup,
-          python(),
-          EditorView.updateListener.of((v) => {
-            if (v.docChanged)
-              changed = true
-          }),
-        ],
-      }),
-      parent: parent.current,
-    });
-    
-    let interval = setInterval(() => {
-      if (changed && props.onChange) {
-        props.onChange(editor.state.doc.toString())
-        changed = false
-      }
-    }, 500)
-    return () => {
-      clearInterval(interval)
-      editor.destroy()
-    }
-  });
-  return <div ref={parent} />
+    setMounted(true);
+  }, []);
+
+  const prismTheme = usePrismTheme();
+
+  const {highlightLines, code} = parseLines(content, undefined, 'python');
+
+  const handleCopyCode = () => {
+    copy(code);
+    setShowCopied(true);
+
+    setTimeout(() => setShowCopied(false), 2000);
+  };
+
+  return (
+    <Highlight
+      {...defaultProps}
+      key={String(mounted)}
+      theme={prismTheme}
+      code={code}
+      language={'python' }>
+      {({ className, style, tokens, getLineProps, getTokenProps}) => (
+        <div
+          className={clsx(
+            styles.codeBlockContainer,
+            ThemeClassNames.common.codeBlock,
+          )}>
+          {codeBlockTitle && (
+            <div style={style} className={styles.codeBlockTitle}>
+              {codeBlockTitle}
+            </div>
+          )}
+          <div className={clsx(styles.codeBlockContent, language)}>
+            <pre
+              tabIndex={0}
+              className={clsx(className, styles.codeBlock, 'thin-scrollbar')}
+              style={style}>
+              <code className={styles.codeBlockLines}>
+                {tokens.map((line, i) => {
+                  if (line.length === 1 && line[0].content === '\n') {
+                    line[0].content = '';
+                  }
+
+                  const lineProps = getLineProps({line, key: i});
+
+                  if (highlightLines.includes(i)) {
+                    lineProps.className += ' docusaurus-highlight-code-line';
+                  }
+
+                  return (
+                    <span key={i} {...lineProps}>
+                      {line.map((token, key) => (
+                        <span key={key} {...getTokenProps({token, key})} />
+                      ))}
+                      <br />
+                    </span>
+                  );
+                })}
+              </code>
+            </pre>
+            <textarea className={styles.codeEditor} key={"static"} onChange={event => setCode(event.target.value)}/>
+            <button
+              type="button"
+              aria-label={translate({
+                id: 'theme.CodeBlock.copyButtonAriaLabel',
+                message: 'Copy code to clipboard',
+                description: 'The ARIA label for copy code blocks button',
+              })}
+              className={clsx(styles.copyButton, 'clean-btn')}
+              onClick={handleCopyCode}>
+              {showCopied ? (
+                <Translate
+                  id="theme.CodeBlock.copied"
+                  description="The copied button label on code blocks">
+                  Copied
+                </Translate>
+              ) : (
+                <Translate
+                  id="theme.CodeBlock.copy"
+                  description="The copy button label on code blocks">
+                  Copy
+                </Translate>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+    </Highlight>
+  );
 }
+
 export default function Playground() {
   let [logs, setLogs] = useState([])
   useEffect(() => {
