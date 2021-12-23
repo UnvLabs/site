@@ -4,7 +4,7 @@
 
 .preview {
   width: 100%;
-  height: 50%;
+  height: 40vh;
   border: 2px solid gray;
 }
 
@@ -22,9 +22,11 @@
 
 .codeBlock {
   position: relative;
+  height: 40vh;
   margin: 0;
   padding: 0;
   border-radius: var(--ifm-global-radius);
+  overflow: auto;
 }
 
 .copyButton {
@@ -68,8 +70,9 @@
 }
 
 .codeEditor::selection {
-  caret-color: #000;
+  background-color: #accef7;
   color: transparent;
+  caret-color: #000;
 }
 
 @media print {
