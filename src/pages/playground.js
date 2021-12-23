@@ -39,7 +39,7 @@ function compile(input) {
 function CodeEditor() {
   let parent = createRef()
   let [mounted, setMounted] = useState(false)
-  let [logs, setLogs] = useState(false)
+  let [logs, setLogs] = useState([])
   useEffect(() => {
     if (mounted)
       return
