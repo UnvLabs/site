@@ -37,7 +37,7 @@ function compile(input) {
 
 export default function Playground() {
   useEffect(() => {
-    let editor = document.querySelector(styles.codeEditor)
+    let editor = document.querySelector("." + styles.codeEditor)
     editor.contenteditable = true
     return () => {
       
