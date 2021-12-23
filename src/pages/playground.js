@@ -50,7 +50,7 @@ function Editor(props) {
 
   const [showCopied, setShowCopied] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [content, setContent] = useState('');
+  const [code, setCode] = useState('');
 
   useEffect(() => {
     setMounted(true);
@@ -58,10 +58,8 @@ function Editor(props) {
 
   const prismTheme = usePrismTheme();
 
-  const {highlightLines, code} = parseLines(content, undefined, 'python');
-
   const handleCopyCode = () => {
-    copy(code);
+    copy(code[1]);
     setShowCopied(true);
 
     setTimeout(() => setShowCopied(false), 2000);
@@ -72,7 +70,7 @@ function Editor(props) {
       {...defaultProps}
       key={String(mounted)}
       theme={prismTheme}
-      code={code}
+      code={code[1]}
       language={'python' }>
       {({ className, style, tokens, getLineProps, getTokenProps}) => (
         <div
@@ -98,7 +96,7 @@ function Editor(props) {
 
                   const lineProps = getLineProps({line, key: i});
 
-                  if (highlightLines.includes(i)) {
+                  if (code[0].includes(i)) {
                     lineProps.className += ' docusaurus-highlight-code-line';
                   }
 
@@ -112,7 +110,10 @@ function Editor(props) {
                   );
                 })}
               </code>
-              <textarea className={styles.codeEditor} key={"static"} onChange={event => setContent(event.target.value)}/>
+              <textarea className={styles.codeEditor} key={"static"} onChange={event => {
+                const {highlightLines, code} = parseLines(event.target.value, undefined, 'python');
+                setCode([highlightLines, code])
+              }/>
             </pre>
             <button
               type="button"
