@@ -50,7 +50,7 @@ function Editor(props) {
 
   const [showCopied, setShowCopied] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(['', []]);
 
   useEffect(() => {
     setMounted(true);
