@@ -37,10 +37,27 @@ function compile(input) {
 }
 
 export default function Playground() {
-  const [code, setCode] = React.useState(
-    `function add(a, b) {\n  return a + b;\n}`
+  const [code, setCode] = useState(
+    ``
   );
+  const [mounted, setMounted] = useState(false)
+  const [logs, setLogs] = useState(false)
 
+  useEffect(() => {
+    if(!mounted) {
+      window.print = (...args) => {
+        setLogs([
+          ...logs,
+          (<pre key={logs.length}>
+            <code>{args.join(' ')}</code>
+          </pre>)
+        ])
+        return console.log(...args)
+      }
+      setMounted(true)
+    }
+  }, [])
+  
   return (
     <Layout>
       <h1>Playground</h1>
