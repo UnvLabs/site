@@ -41,7 +41,7 @@ export default function Playground() {
     ``
   );
   const [mounted, setMounted] = useState(false)
-  const [logs, setLogs] = useState(false)
+  const [logs, setLogs] = useState([])
 
   useEffect(() => {
     if(!mounted) {
