@@ -1,9 +1,8 @@
-import React, { Fragment, useEffect, useState, useRef } from 'react';
-import Layout from '@theme/Layout';
-import Editor from 'react-simple-code-editor';
-import Highlight, { Prism } from 'prism-react-renderer';
+import React, { Fragment, useEffect, useState, useRef } from "react";
+import Layout from "@theme/Layout";
+import Highlight, { Prism } from "prism-react-renderer";
 import styles from "./playground.module.css";
-import usePrismTheme from '@theme/hooks/usePrismTheme';
+import usePrismTheme from "@theme/hooks/usePrismTheme";
 
 function compile(input) {
   input = input.replace(
@@ -21,8 +20,9 @@ function compile(input) {
     if (statement) {
       let [, spaces, name, args] = statement;
       indents.unshift(spaces.length);
-      output += `${spaces}${name} ${/function|try|class/.test(name) ? args : `(${args})`
-        } {\n`;
+      output += `${spaces}${name} ${
+        /function|try|class/.test(name) ? args : `(${args})`
+      } {\n`;
     } else {
       let spaces = line.match(/^\s*/)[0].length;
       for (let indent of [...indents]) {
@@ -37,53 +37,28 @@ function compile(input) {
 }
 
 export default function Playground() {
-  const [code, setCode] = useState(
-    ``
-  );
-  const [mounted, setMounted] = useState(false)
-  const logger = useRef()
+  const [code, setCode] = useState(``);
+  const [mounted, setMounted] = useState(false);
+  const logger = useRef();
 
-  useEffect(() => {
-    if(!mounted) {
-      window.print = (...args) => {
-        return console.log(...args)
-      }
-    }
-    setMounted(true)
-  })
-  
   return (
     <Layout>
       <h1>Playground</h1>
       <div className={styles.playground}>
-        <Editor
-          value={code}
-          onValueChange={(code) => setCode(code)}
-          highlight={code => (
-    <Highlight
-      Prism={Prism}
-      code={code}
-      tabSize={4}
-      className={styles.codeEditor}
-      theme={usePrismTheme()}
-      language={'python'}
-    >
-      {({ tokens, getLineProps, getTokenProps }) => (
-        <Fragment>
-          {tokens.map((line, i) => (
-            <div {...getLineProps({ line, key: i })}>
-              {line.map((token, key) => (
-                <span {...getTokenProps({ token, key })} />
-              ))}
-            </div>
-          ))}
-        </Fragment>
-      )}
-    </Highlight>
-  )}
-        />
-        <div className={styles.preview} ref={logger}>
-        </div>
+        <div
+          contentEditable={true}
+          className={styles.editor}
+          onPaste={() => {
+            e.preventDefault();
+
+            var text = (e.originalEvent || e).clipboardData.getData(
+              "text/plain"
+            );
+
+            document.execCommand("insertHTML", false, text);
+          }}
+        ></div>
+        <div className={styles.preview} ref={logger}></div>
       </div>
     </Layout>
   );
