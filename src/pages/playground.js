@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import Layout from '@theme/Layout';
 import Editor from 'react-simple-code-editor';
 import Highlight, { Prism } from 'prism-react-renderer';
@@ -41,17 +41,11 @@ export default function Playground() {
     ``
   );
   const [mounted, setMounted] = useState(false)
-  const [logs, setLogs] = useState([])
+  const logger = useRef()
 
   useEffect(() => {
     if(!mounted) {
       window.print = (...args) => {
-        setLogs([
-          ...logs,
-          (<pre key={logs.length}>
-            <code>{args.join(' ')}</code>
-          </pre>)
-        ])
         return console.log(...args)
       }
       setMounted(true)
@@ -88,8 +82,7 @@ export default function Playground() {
     </Highlight>
   )}
         />
-        <div className={styles.preview}>
-          {logs}
+        <div className={styles.preview} ref={logger}>
         </div>
       </div>
     </Layout>
