@@ -77,7 +77,7 @@ function Editor(props) {
             styles.codeBlockContainer,
             ThemeClassNames.common.codeBlock,
           )}>
-          <div className={clsx(styles.codeBlockContent, language)}>
+          <div className={clsx(styles.codeBlockContent, 'python')}>
             <pre
               tabIndex={0}
               className={clsx(className, styles.codeBlock, 'thin-scrollbar')}
