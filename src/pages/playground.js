@@ -43,7 +43,7 @@ export default function Playground() {
       <h1>Playground</h1>
       <div className={styles.playground}>
         <CodeBlock> </CodeBlock>
-        <CodeBlock ref={editor}/> </CodeBlock>
+        <CodeBlock ref={editor}> </CodeBlock>
         <div className={styles.preview}></div>
       </div>
     </Layout>
