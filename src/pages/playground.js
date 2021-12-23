@@ -3,6 +3,7 @@ import Layout from "@theme/Layout";
 import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup"
 import { python } from "@codemirror/lang-python"
 import styles from "./playground.module.css";
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 function compile(input) {
   input = input.replace(
@@ -36,24 +37,21 @@ function compile(input) {
 }
 
 function CodeEditor() {
-  return <BrowserOnly fallback={<div>Loading...</div>}>
-    {() => {
-      let parent = createRef()
-      useEffect(() => {
-        let editor = new EditorView({
-          state: EditorState.create({
-            doc: `print('Hello World!)`,
-            extensions: [basicSetup, python(), EditorView.theme({
-              "&": { height: "40vh" },
-              ".cm-scroller": { overflow: "auto" }
-            })]
-          }),
-          parent: ref.current
-        })
-      }, [])
-      return <div ref={parent}></div>
-    }}
-  </BrowserOnly>
+  let parent = createRef()
+  useEffect(() => {
+    let editor = new EditorView({
+      state: EditorState.create({
+        doc: `print('Hello World!)`,
+        extensions: [basicSetup, python(), EditorView.theme({
+          "&": { height: "40vh" },
+          ".cm-scroller": { overflow: "auto" }
+        })]
+      }),
+      parent: ref.current
+    })
+  }, [])
+  return <div ref={parent}></div>
+
 }
 
 export default function Playground() {
@@ -61,7 +59,11 @@ export default function Playground() {
     <Layout>
       <h1>Playground</h1>
       <div className={styles.playground}>
-        <CodeEditor />
+        <BrowserOnly fallback={<div>Loading...</div>}>
+          {() => {
+            <CodeEditor />
+          }}
+        </BrowserOnly>
         <div className={styles.preview}></div>
       </div>
     </Layout>
