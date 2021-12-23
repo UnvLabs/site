@@ -47,7 +47,14 @@ function CodeEditor() {
     window.print = (...args) => {
       let pre = document.createElement('pre')
       let code = document.createElement('code')
-      code.textContent = args.join(' ')
+      code.textContent = args.map(arg => {
+        if (typeof arg == 'object')
+          try {
+            return JSON.stringify(arg, undefined, 2)
+
+          } catch { }
+        return arg
+      }).join(' ')
       pre.appendChild(code)
       document.querySelector('.' + styles.preview).appendChild(pre)
       return console.log(...args)
