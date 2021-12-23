@@ -46,7 +46,7 @@ function CodeEditor() {
     window.print = console.log()
     let editor = new EditorView({
       state: EditorState.create({
-        doc: `print('Hello World!)`,
+        doc: `print('Hello World!')`,
         extensions: [
           basicSetup,
           python(),
