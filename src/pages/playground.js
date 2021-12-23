@@ -48,8 +48,8 @@ export default function Playground() {
       window.print = (...args) => {
         return console.log(...args)
       }
-      setMounted(true)
     }
+    setMounted(true)
   })
   
   return (
