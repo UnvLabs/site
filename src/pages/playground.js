@@ -42,6 +42,7 @@ function CodeEditor() {
   let [logs, setLogs] = useState([])
   useEffect(() => {
     window.print = (...args) => {
+      console.log(logs)
       setLogs([
         ...logs,
         (<pre key={logs.length}>
@@ -57,7 +58,9 @@ function CodeEditor() {
     setMounted(true)
     let editor = new EditorView({
       state: EditorState.create({
-        doc: `print('Hello World!')`,
+        doc: `if 'Unv is awesome!'
+    print('Hello World!')
+`,
         extensions: [
           basicSetup,
           python(),
