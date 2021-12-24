@@ -48,18 +48,24 @@ function CodeEditor() {
       let pre = document.createElement('pre')
       let code = document.createElement('code')
       code.textContent = args.map(arg => {
-        if (typeof arg == 'object')
+        if (arg.toString === Object.prototype.toString)
           try {
             return JSON.stringify(arg, undefined, 2)
 
           } catch { }
-        return arg
+        return arg + ''
       }).join(' ')
       pre.appendChild(code)
       document.querySelector('.' + styles.preview).appendChild(pre)
       return console.log(...args)
     }
-
+    
+    window.number = v => +v
+    
+    window.string = v => v + ''
+    
+    window.type = v => typeof v
+    
     let editor = new EditorView({
       state: EditorState.create({
         doc: `if 'Unv is awesome!'
@@ -79,7 +85,8 @@ function CodeEditor() {
               try {
                 let fn = new Function(compile(editor.state.doc.toString()))
                 fn()
-              } catch {
+              } catch(e) {
+                print(e)
               }
             }
           })
