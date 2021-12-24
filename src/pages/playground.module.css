@@ -7,22 +7,3 @@
   height: 40vh;
   border: 2px solid gray;
 }
-
-.wrapper {
-  position: relative;
-  height: 40vh;
-}
-
-.codeEditor * {
-  color: transparent;
-  background: transparent;
-  border-color: transparent;
-}
-
-.codeEditor, .codeView {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
