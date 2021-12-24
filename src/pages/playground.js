@@ -8,7 +8,7 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 function compile(input) {
   input = input.replace(
     /("(?:\\["\\]|[^"\\])*"|'(?:\\['\\]|[^'\\])*')|###[^]*?###|#.*/gm,
-    (_, string) => (string ? string.replace("\n", "\\n") : "")
+    (_, string) => (string ? string.replace(/\n/g, "\\n") : "")
   );
   let lines = input.split("\n");
   let comment = false;
