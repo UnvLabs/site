@@ -1,8 +1,3 @@
----
-title: Playground
-description: The playground for Unv programming language
-hide_table_of_contents: true
----
 import React from 'react';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
@@ -35,7 +30,7 @@ function HomepageHeader() {
   );
 }
 
-function Home() {
+export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
@@ -48,6 +43,3 @@ function Home() {
     </Layout>
   );
 }
-
-
-<Home/>
