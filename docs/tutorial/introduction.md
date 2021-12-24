@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 ---
-# Unv Introduction
+# Introduction
 ## What is Unv?
 Unw is a new programming language. Created by Kavindu Santhusa.
 
@@ -31,5 +31,5 @@ Any programme
 
 **Example**
 ```py
-console.log("Hello, World!")
+print("Hello, World!")
 ```
