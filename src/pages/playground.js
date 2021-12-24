@@ -1,8 +1,3 @@
----
-title: Playground
-description: play with Unv programming language
-hide_table_of_contents: true
----
 import { Fragment, useEffect, useState, createRef } from "react";
 import Layout from "@theme/Layout";
 import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup"
@@ -106,7 +101,7 @@ function CodeEditor() {
   </>
 }
 
-function Playground() {
+export default function Playground() {
   return (
     <Layout>
       <h1>Playground</h1>
@@ -120,5 +115,3 @@ function Playground() {
     </Layout>
   );
 }
-
-<Playground/>
