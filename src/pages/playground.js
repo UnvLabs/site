@@ -31,7 +31,7 @@ function compile(input) {
       }
       let variable = line.match(/^(\s*)([A-Za-z_]\w*)(\s*=.*)/)
       if(variable)
-        output += variable[1] + '$locals.' + variable[2] + variable[3] + '\n';
+        output += variable[1] + 'var ' + variable[2] + '=' + '$locals.' + variable[2] + variable[3] + '\n';
       else
         output += line + '\n';
     }
