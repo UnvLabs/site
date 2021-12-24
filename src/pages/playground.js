@@ -1,64 +1,117 @@
+import React, { Fragment, useEffect, useState, createRef } from "react";
+import Layout from "@theme/Layout";
 import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup"
 import { python } from "@codemirror/lang-python"
-import Layout from '@theme/Layout';
-import React, { useRef, useEffect, useState } from 'react'
+import styles from "./playground.module.css";
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
-export default function Playground() {
-  const parent = useRef();
-  const [src, setSrc] = useState('')
-
-  useEffect(() => {
-    const getGeneratedPageURL = (js) => {
-      const getBlobURL = (code, type) => {
-        const blob = new Blob([js], { type })
-        return URL.createObjectURL(blob)
+function compile(input) {
+  input = input.replace(
+    /("(?:\\["\\]|[^"\\])*"|'(?:\\['\\]|[^'\\])*')|###[^]*?###|#.*/gm,
+    (_, string) => (string ? string.replace(/\n/g, "\\n") : "")
+  );
+  let lines = input.split("\n");
+  let comment = false;
+  let indents = [];
+  let output = "";
+  for (let line of lines) {
+    let statement = line.match(
+      /^(\s*)(if|else|switch|try|catch|(?:async\s+)?function\*?|class|do|while|for)\s+(.+)/
+    );
+    if (statement) {
+      let [, spaces, name, args] = statement;
+      indents.unshift(spaces.length);
+      output += `${spaces}${name} ${/function|try|class/.test(name) ? args : `(${args})`
+        } {\n`;
+    } else {
+      let spaces = line.match(/^\s*/)[0].length;
+      for (let indent of [...indents]) {
+        if (indent < spaces) break;
+        output += `${" ".repeat(indent)}}\n`;
+        indents.shift();
       }
-
-      const jsURL = getBlobURL(js, 'text/javascript')
-
-      const source = `
-        <html>
-          <head>
-            ${js && `<script src="${jsURL}"></script>`}
-          </head>
-          <body>
-          </body>
-        </html>
-      `
-
-      return getBlobURL(source, 'text/html')
+      output += line.replace(/^(\s*)var(\s)/, "$1let$2") + "\n";
     }
+  }
+  return output;
+}
 
-    let changed;
+function CodeEditor() {
+  let parent = createRef()
+  let [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    if (mounted)
+      return
+    setMounted(true)
 
+    window.print = (...args) => {
+      let pre = document.createElement('pre')
+      let code = document.createElement('code')
+      code.textContent = args.map(arg => {
+        if (arg.toString === Object.prototype.toString)
+          try {
+            return JSON.stringify(arg, undefined, 2)
+
+          } catch { }
+        return arg + ''
+      }).join(' ')
+      pre.appendChild(code)
+      document.querySelector('.' + styles.preview).appendChild(pre)
+      return console.log(...args)
+    }
+    
+    window.number = v => +v
+    
+    window.string = v => v + ''
+    
+    window.type = v => typeof v
+    
     let editor = new EditorView({
       state: EditorState.create({
-        extensions: [basicSetup,
+        doc: `if 'Unv is awesome!'
+    print('Hello World!')
+# keep editing for live results
+`,
+        extensions: [
+          basicSetup,
           python(),
-          EditorView.updateListener.of((v) => {
-            if (v.docChanged) changed = true
-          })]
+          EditorView.theme({
+            "&": { height: "40vh" },
+            ".cm-scroller": { overflow: "auto" }
+          }),
+          EditorView.updateListener.of(v => {
+            if (v.docChanged) {
+              document.querySelector('.' + styles.preview).textContent = ''
+              try {
+                let fn = new Function(compile(editor.state.doc.toString()))
+                fn()
+              } catch(e) {
+                print(e)
+              }
+            }
+          })
+        ]
       }),
       parent: parent.current
     })
+  }, [])
+  return <>
+    <div ref={parent}></div>
+    <div className={styles.preview} ></div>
+  </>
+}
 
-    let update = setInterval(() => {
-      if (changed) {
-        changed = false
-        setSrc(getGeneratedPageURL(editor.state.doc.toString()))
-      }
-    }, 1000)
-
-    return () => {
-      editor.destroy()
-      clearInterval(update)
-    }
-  })
+export default function Playground() {
   return (
     <Layout>
-      <main ref={parent}>
-      </main>
-      <iframe src={src}></iframe>
+      <h1>Playground</h1>
+      <div className={styles.playground}>
+        <BrowserOnly fallback={<div>Loading...</div>}>
+          {() => {
+            return <CodeEditor />
+          }}
+        </BrowserOnly>
+      </div>
     </Layout>
   );
 }

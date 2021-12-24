@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'Unv language',
+  tagline: 'Universal programming language',
   url: 'https://unv.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'warn',
@@ -27,7 +27,6 @@ const config = {
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
           editUrl:
             'https://github.com/unvlabs/site/edit/main/blog/',
         },
@@ -48,9 +47,10 @@ const config = {
           src: 'img/logo.svg',
         },
         items: [
+          { to: '/playground', label: 'Playground', position: 'left' },
           {
             type: 'doc',
-            docId: 'introduction',
+            docId: 'tutorial/introduction',
             position: 'left',
             label: 'Tutorial',
           },
@@ -70,7 +70,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/introduction',
+                to: '/docs/tutorial/introduction',
               },
             ],
           },
@@ -94,6 +94,10 @@ const config = {
           {
             title: 'More',
             items: [
+              {
+                label: 'Playground',
+                to: '/playground',
+              },
               {
                 label: 'Blog',
                 to: '/blog',

@@ -4,42 +4,41 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'Syntax sugar',
+    icon: '🍬',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        The syntax of Unv language is inspired by Python. So It's nearly similar to English.
+        instead of too many brackets ot depends on whitespace.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Universal',
+    icon: '🌐',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Compilers convert Unv language to existing languages.(currently JavaScript, more coming soon).
+        Use Unv for your web, mobile, desktop or IOT application.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
+    title: 'Friendly',
+    icon: '🤝',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        As Unvlang is universal, It can import your favourite library.
       </>
     ),
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({icon, title, description}) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} alt={title} />
+        <p className={styles.featureIcon} alt={title}>{icon}</p>
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
