@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState, createRef } from "react";
+import React, { Fragment, useEffect, useState, createRef } from "react";
 import Layout from "@theme/Layout";
 import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup"
 import { python } from "@codemirror/lang-python"
