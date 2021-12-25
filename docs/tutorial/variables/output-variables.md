@@ -11,7 +11,7 @@ To combine both text and a variable, Unv uses the  `+`  character:
 
 ### Example
 ```py
-var x =  "awesome"  
+x =  "awesome"  
 print("Unv is "  + x)
 ```
 
@@ -19,9 +19,9 @@ You can also use the  `+`  character to add a variable to another variable:
 
 ### Example
 ```py
-var x =  "Unv is "  
-var y =  "awesome"  
-var z = x + y  
+x =  "Unv is "  
+y =  "awesome"  
+z = x + y  
 print(z)
 ```
 
