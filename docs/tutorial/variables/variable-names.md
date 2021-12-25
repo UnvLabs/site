@@ -16,21 +16,21 @@ A variable can have a short name (like x and y) or a more descriptive name (age,
 
 Legal variable names:
 ```py
-var myvar =  "John"  
-var my_var =  "John"  
-var _my_var =  "John"  
-var myVar =  "John"  
-var MYVAR =  "John"  
-var myvar2 =  "John"
+myvar =  "John"  
+my_var =  "John"  
+_my_var =  "John"  
+myVar =  "John"  
+MYVAR =  "John"  
+myvar2 =  "John"
 ```
 
 ### Example
 
 Illegal variable names:
 ```py
-var 2myvar =  "John"  
-var my-var =  "John"  
-var my var =  "John"
+2myvar =  "John"  
+my-var =  "John"  
+my var =  "John"
 ```
 
 Remember that variable names are case-sensitive
@@ -45,21 +45,21 @@ There are several techniques you can use to make them more readable:
 
 Each word, except the first, starts with a capital letter:
 ```py
-var myVariableName =  "John"
+myVariableName =  "John"
 ```
 
 ## Pascal Case
 
 Each word starts with a capital letter:
 ```py
-var MyVariableName =  "John"
+MyVariableName =  "John"
 ```
 
 ## Snake Case
 
 Each word is separated by an underscore character:
 ```py
-var my_variable_name =  "John"
+my_variable_name =  "John"
 ```
 
 > Snake Case is recommended.
