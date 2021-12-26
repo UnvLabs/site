@@ -36,7 +36,9 @@ function compile(input) {
         line.replace(
           /^(\s*)((?:\w+\s*,\s*)*\w+)(\s*=\s*)(.*)/,
           (_, start, names, middle, end) =>
-            `${start}var [${names}]${middle}$destructure(${end})`
+            `${start}var ${
+              ~names.indexOf(",") ? `[${names}]` : names
+            }${middle}$destructure(${end})`
         ) + "\n";
     }
   }
