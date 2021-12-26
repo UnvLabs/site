@@ -105,7 +105,7 @@ function CodeEditor() {
     let editor = new EditorView({
       state: EditorState.create({
         doc:
-          window.location.hash.slice(1) ||
+          decodeURIComponent(window.location.hash.slice(1)) ||
           `if 'Unv is awesome!'
     print('Hello World!')
 # keep editing for live results
