@@ -5,7 +5,7 @@ sidebar_position: 3
 
 ## Many Values to Multiple Variables
 
-Python allows you to assign values to multiple variables in one line:
+Unv allows you to assign values to multiple variables in one line:
 
 ```py
 x, y, z =  "Orange",  "Banana",  "Cherry"  
@@ -29,7 +29,7 @@ print(z)
 
 ## Unpack a Collection
 
-If you have a collection of values in a list, tuple etc. Python allows you extract the values into variables. This is called  _unpacking_.
+If you have a collection of values in a list, tuple etc. Unv allows you extract the values into variables. This is called  _unpacking_.
 
 Unpack a list:
 ```py
