@@ -35,8 +35,8 @@ function compile(input) {
       output +=
         line.replace(/^([\w\s,=]+)=(.*)/, (_, start, end) => {
           let vars = start.split("=");
-          return `var ${
-            vars.length > 1 ? `${vars.slice(1).join(",")};` : ""
+          return `${
+            vars.length > 1 ? `var ${vars.slice(1).join(",")}\n` : ""
           }var ${vars
             .map((a) => (~a.indexOf(",") ? `[${a}]` : a))
             .join("=")}=${end}`;
