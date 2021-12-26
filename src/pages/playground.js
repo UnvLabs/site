@@ -33,13 +33,12 @@ function compile(input) {
         indents.shift();
       }
       output +=
-        line.replace(
-          /^(\s*)((?:\w+\s*,\s*)*\w+)(\s*=\s*)(.*)/,
-          (_, start, names, middle, end) =>
-            `${start}var ${
-              ~names.indexOf(",") ? `[${names}]` : names
-            }${middle}$destructure(${end})`
-        ) + "\n";
+        line.replace(/^([\w\s,=]+)=(.*)/, (_, start, end) => {
+          let vars = start.split("=");
+          return `${vars.length>1?`${vars.slice(1).join('=').split(/,|=/)};`:''}var ${vars.map((a) =>
+            ~a.indexOf(",") ? `[${a}]` : a
+          ).join('=')}=${end}`;
+        }) + "\n";
     }
   }
   return output;
@@ -63,13 +62,15 @@ function CodeEditor() {
     window.print = (...args) => {
       window.setCode([
         ...window.code,
-        args.map((arg) => {
-          if (arg.toString === Object.prototype.toString)
-            try {
-              return JSON.stringify(arg, undefined, 2);
-            } catch {}
-          return arg + "";
-        }).join(" "),
+        args
+          .map((arg) => {
+            if (arg.toString === Object.prototype.toString)
+              try {
+                return JSON.stringify(arg, undefined, 2);
+              } catch {}
+            return arg + "";
+          })
+          .join(" "),
       ]);
 
       return console.log(...args);
