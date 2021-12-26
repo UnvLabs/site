@@ -63,13 +63,13 @@ function CodeEditor() {
     window.print = (...args) => {
       window.setCode([
         ...window.code,
-        ...args.map((arg) => {
+        args.map((arg) => {
           if (arg.toString === Object.prototype.toString)
             try {
               return JSON.stringify(arg, undefined, 2);
             } catch {}
           return arg + "";
-        }),
+        }).join(" "),
       ]);
 
       return console.log(...args);
