@@ -86,9 +86,27 @@ function CodeEditor() {
 
     window.$destructure = (...args) => (args.length == 1 ? args[0] : args);
 
+    let run = (doc) => {
+      window.location.hash = encodeURIComponent(doc);
+      window.setCode([]);
+      try {
+        Import(sucrase).then(({ transform }) => {
+          let fn = new Function(
+            transform(compile(doc), {
+              transforms: ["typescript", "imports"],
+            }).code
+          );
+          fn();
+        });
+      } catch (e) {
+        print(e);
+      }
+    };
     let editor = new EditorView({
       state: EditorState.create({
-        doc: `if 'Unv is awesome!'
+        doc:
+          window.location.hash.slice(1) ||
+          `if 'Unv is awesome!'
     print('Hello World!')
 # keep editing for live results
 `,
@@ -100,26 +118,13 @@ function CodeEditor() {
             ".cm-scroller": { overflow: "auto" },
           }),
           EditorView.updateListener.of((v) => {
-            if (v.docChanged) {
-              window.setCode([]);
-              try {
-                Import(sucrase).then(({ transform }) => {
-                  let fn = new Function(
-                    transform(compile(editor.state.doc.toString()), {
-                      transforms: ["typescript", "imports"],
-                    }).code
-                  );
-                  fn();
-                });
-              } catch (e) {
-                print(e);
-              }
-            }
+            if (v.docChanged) run(editor.state.doc.toString());
           }),
         ],
       }),
       parent: parent.current,
     });
+    run(editor.state.doc.toString());
   }, []);
   return (
     <>
