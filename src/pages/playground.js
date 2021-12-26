@@ -44,8 +44,8 @@ let sucrase =
 
 function CodeEditor() {
   let parent = createRef();
+  let code = createRef();
   let [mounted, setMounted] = useState(false);
-  let [code, setCode] = useState([]);
 
   useEffect(() => {
     if (mounted) return;
@@ -53,17 +53,15 @@ function CodeEditor() {
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
     window.print = (...args) => {
-      console.log(code)
-      setCode([
-        ...code,
-        ...args.map((arg) => {
+      code.current.innerHTML += `<code>${args
+        .map((arg) => {
           if (arg.toString === Object.prototype.toString)
             try {
               return JSON.stringify(arg, undefined, 2);
             } catch {}
           return arg + "";
-        }),
-      ]);
+        })
+        .join(" ")}</code>`;
 
       return console.log(...args);
     };
@@ -89,7 +87,7 @@ function CodeEditor() {
           }),
           EditorView.updateListener.of((v) => {
             if (v.docChanged) {
-              setCode([]);
+              code.current.textContent = "";
               try {
                 Import(sucrase).then(({ transform }) => {
                   let fn = new Function(
@@ -113,11 +111,7 @@ function CodeEditor() {
     <>
       <div ref={parent}></div>
       <div className={styles.preview}>
-        {code.map((c, i) => (
-          <CodeBlock key={i} className="language-js">
-            {c}
-          </CodeBlock>
-        ))}
+        <pre ref={code}></pre>
       </div>
     </>
   );
