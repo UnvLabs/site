@@ -46,7 +46,7 @@ function CodeEditor() {
   let parent = createRef();
   let [mounted, setMounted] = useState(false);
   let [code, setCode] = useState([]);
-  window.setCode = code
+  window.setCode = setCode
   window.code = code
   
   useEffect(() => {
