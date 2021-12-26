@@ -53,6 +53,7 @@ function CodeEditor() {
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
     window.print = (...args) => {
+      console.log(code)
       setCode([
         ...code,
         ...args.map((arg) => {
