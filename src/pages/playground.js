@@ -33,7 +33,11 @@ function compile(input) {
         indents.shift();
       }
       output +=
-        line.replace(/^(\s*)([A-Za-z_]\w*)(\s*=.*)/, "$1var $2$3") + "\n";
+        line.replace(
+          /^(\s*)((?:\w+\s*,\s*)*\w+)(\s*=\s*)(.*)/,
+          (_, start, names, middle, end) =>
+            `${start}var [${names}]${middle}$destructure(${end})`
+        ) + "\n";
     }
   }
   return output;
@@ -46,9 +50,9 @@ function CodeEditor() {
   let parent = createRef();
   let [mounted, setMounted] = useState(false);
   let [code, setCode] = useState([]);
-  window.setCode = setCode
-  window.code = code
-  
+  window.setCode = setCode;
+  window.code = code;
+
   useEffect(() => {
     if (mounted) return;
     setMounted(true);
@@ -74,6 +78,8 @@ function CodeEditor() {
     window.string = (v) => v + "";
 
     window.type = (v) => typeof v;
+
+    window.$destructure = (...args) => (args.length == 1 ? args[0] : args);
 
     let editor = new EditorView({
       state: EditorState.create({
