@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState, createRef } from "react";
 import Layout from "@theme/Layout";
+import CodeBlock from "@theme/CodeBlock";
 import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup";
 import { python } from "@codemirror/lang-python";
 import styles from "./playground.module.css";
@@ -23,7 +24,7 @@ function compile(input) {
       indents.unshift(spaces.length);
       output += `${spaces}${name} ${
         /function|try|class/.test(name) ? args : `(${args})`
-      } {${/function/.test(name) ? "let $locals = {}" : ""}\n`;
+      } {\n`;
     } else {
       let spaces = line.match(/^\s*/)[0].length;
       for (let indent of [...indents]) {
@@ -31,44 +32,38 @@ function compile(input) {
         output += `${" ".repeat(indent)}}\n`;
         indents.shift();
       }
-      let variable = line.match(/^(\s*)([A-Za-z_]\w*)(\s*=.*)/);
-      if (variable)
-        output +=
-          variable[1] +
-          "var " +
-          variable[2] +
-          "=" +
-          "$locals." +
-          variable[2] +
-          variable[3] +
-          "\n";
-      else output += line + "\n";
+      output +=
+        line.replace(/^(\s*)([A-Za-z_]\w*)(\s*=.*)/, "$1var $2$3") + "\n";
     }
   }
-  return "let $globals = {}, $locals = $globals;" + output;
+  return output;
 }
+
+let sucrase =
+  "https://cdn.skypack.dev/pin/sucrase@v3.20.3-gZX9cgIr2LXp7bQ6YAVm/mode=imports,min/optimized/sucrase.js";
 
 function CodeEditor() {
   let parent = createRef();
   let [mounted, setMounted] = useState(false);
+  let [code, setCode] = useState([]);
+
   useEffect(() => {
     if (mounted) return;
     setMounted(true);
-
+    let Import = new Function("url", "return import(url)");
+    Import(sucrase);
     window.print = (...args) => {
-      let pre = document.createElement("pre");
-      let code = document.createElement("code");
-      code.textContent = args
-        .map((arg) => {
+      setCode([
+        ...code,
+        ...args.map((arg) => {
           if (arg.toString === Object.prototype.toString)
             try {
               return JSON.stringify(arg, undefined, 2);
             } catch {}
           return arg + "";
-        })
-        .join(" ");
-      pre.appendChild(code);
-      document.querySelector("." + styles.preview).appendChild(pre);
+        }),
+      ]);
+
       return console.log(...args);
     };
 
@@ -93,10 +88,16 @@ function CodeEditor() {
           }),
           EditorView.updateListener.of((v) => {
             if (v.docChanged) {
-              document.querySelector("." + styles.preview).textContent = "";
+              setCode([]);
               try {
-                let fn = new Function(compile(editor.state.doc.toString()));
-                fn();
+                Import(sucrase).then(({ transform }) => {
+                  let fn = new Function(
+                    transform(compile(editor.state.doc.toString()), {
+                      transforms: ["typescript", "imports"],
+                    }).code
+                  );
+                  fn();
+                });
               } catch (e) {
                 print(e);
               }
@@ -110,7 +111,13 @@ function CodeEditor() {
   return (
     <>
       <div ref={parent}></div>
-      <div className={styles.preview}></div>
+      <div className={styles.preview}>
+        {code.map((c, i) => (
+          <CodeBlock key={i} className="language-js">
+            {c}
+          </CodeBlock>
+        ))}
+      </div>
     </>
   );
 }
