@@ -35,9 +35,11 @@ function compile(input) {
       output +=
         line.replace(/^([\w\s,=]+)=(.*)/, (_, start, end) => {
           let vars = start.split("=");
-          return `${vars.length>1?`${vars.slice(1).join('=').split(/,|=/)};`:''}var ${vars.map((a) =>
-            ~a.indexOf(",") ? `[${a}]` : a
-          ).join('=')}=${end}`;
+          return `var ${
+            vars.length > 1 ? `${vars.slice(1).join(",")};` : ""
+          }var ${vars
+            .map((a) => (~a.indexOf(",") ? `[${a}]` : a))
+            .join("=")}=${end}`;
         }) + "\n";
     }
   }
