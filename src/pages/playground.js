@@ -1,19 +1,20 @@
 import React, { Fragment, useEffect, useState, createRef } from "react";
 import Layout from "@theme/Layout";
-import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup"
-import { python } from "@codemirror/lang-python"
+import CodeBlock from "@theme/CodeBlock";
+import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup";
+import { python } from "@codemirror/lang-python";
 import styles from "./playground.module.css";
-import BrowserOnly from '@docusaurus/BrowserOnly';
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 function compile(input) {
   input = input.replace(
     /("(?:\\["\\]|[^"\\])*"|'(?:\\['\\]|[^'\\])*')|###[^]*?###|#.*/gm,
-    (_, string) => (string ? string.replace(/\n/g, '\\n') : '')
+    (_, string) => (string ? string.replace(/\n/g, "\\n") : "")
   );
-  let lines = input.split('\n');
+  let lines = input.split("\n");
   let comment = false;
   let indents = [];
-  let output = '';
+  let output = "";
   for (let line of lines) {
     let statement = line.match(
       /^(\s*)(if|else|switch|try|catch|(?:async\s+)?function\*?|class|do|while|for)\s+(.+)/
@@ -21,57 +22,93 @@ function compile(input) {
     if (statement) {
       let [, spaces, name, args] = statement;
       indents.unshift(spaces.length);
-      output += `${spaces}${name} ${/function|try|class/.test(name) ? args : `(${args})`} {${/function/.test(name) ? 'let $locals = {}' : ''}\n`;
+      output += `${spaces}${name} ${
+        /function|try|class/.test(name) ? args : `(${args})`
+      } {\n`;
     } else {
       let spaces = line.match(/^\s*/)[0].length;
       for (let indent of [...indents]) {
         if (indent < spaces) break;
-        output += `${' '.repeat(indent)}}\n`;
+        output += `${" ".repeat(indent)}}\n`;
         indents.shift();
       }
-      let variable = line.match(/^(\s*)([A-Za-z_]\w*)(\s*=.*)/)
-      if(variable)
-        output += variable[1] + 'var ' + variable[2] + '=' + '$locals.' + variable[2] + variable[3] + '\n';
-      else
-        output += line + '\n';
+      output +=
+        line.replace(/^([\w\s,=]+)=(.*)/, (_, start, end) => {
+          let vars = start.split("=");
+          return `${
+            vars.length > 1 ? `var ${vars.slice(1).join(",")}\n` : ""
+          }var ${vars
+            .map((a) => (~a.indexOf(",") ? `[${a}]` : a))
+            .join("=")}=$assign(${end})`;
+        }) + "\n";
     }
   }
-  return 'let $globals = {}, $locals = $globals;' + output;
+  return output;
 }
 
+let sucrase =
+  "https://cdn.skypack.dev/pin/sucrase@v3.20.3-gZX9cgIr2LXp7bQ6YAVm/mode=imports,min/optimized/sucrase.js";
+
 function CodeEditor() {
-  let parent = createRef()
-  let [mounted, setMounted] = useState(false)
+  let parent = createRef();
+  let [mounted, setMounted] = useState(false);
+  let [code, setCode] = useState([]);
+  window.setCode = setCode;
+  window.code = code;
+
   useEffect(() => {
-    if (mounted)
-      return
-    setMounted(true)
-
+    if (mounted) return;
+    setMounted(true);
+    let Import = new Function("url", "return import(url)");
+    Import(sucrase);
     window.print = (...args) => {
-      let pre = document.createElement('pre')
-      let code = document.createElement('code')
-      code.textContent = args.map(arg => {
-        if (arg.toString === Object.prototype.toString)
-          try {
-            return JSON.stringify(arg, undefined, 2)
+      window.setCode([
+        ...window.code,
+        args
+          .map((arg) => {
+            if (arg.toString === Object.prototype.toString)
+              try {
+                return JSON.stringify(arg, undefined, 2);
+              } catch {}
+            return arg + "";
+          })
+          .join(" "),
+      ]);
 
-          } catch { }
-        return arg + ''
-      }).join(' ')
-      pre.appendChild(code)
-      document.querySelector('.' + styles.preview).appendChild(pre)
-      return console.log(...args)
-    }
-    
-    window.number = v => +v
-    
-    window.string = v => v + ''
-    
-    window.type = v => typeof v
-    
+      return console.log(...args);
+    };
+
+    window.float = (v) => +v;
+
+    window.int = (v) => Math.floor(+v);
+
+    window.string = (v) => v + "";
+
+    window.type = (v) => typeof v;
+
+    window.$assign = (...args) => (args.length == 1 ? args[0] : args);
+
+    let run = (doc) => {
+      window.location.hash = encodeURIComponent(doc);
+      window.setCode([]);
+      try {
+        Import(sucrase).then(({ transform }) => {
+          let fn = new Function(
+            transform(compile(doc), {
+              transforms: ["typescript", "imports"],
+            }).code
+          );
+          fn();
+        });
+      } catch (e) {
+        print(e);
+      }
+    };
     let editor = new EditorView({
       state: EditorState.create({
-        doc: `if 'Unv is awesome!'
+        doc:
+          decodeURIComponent(window.location.hash.slice(1)) ||
+          `if 'Unv is awesome!'
     print('Hello World!')
 # keep editing for live results
 `,
@@ -80,40 +117,43 @@ function CodeEditor() {
           python(),
           EditorView.theme({
             "&": { height: "40vh" },
-            ".cm-scroller": { overflow: "auto" }
+            ".cm-scroller": { overflow: "auto" },
           }),
-          EditorView.updateListener.of(v => {
-            if (v.docChanged) {
-              document.querySelector('.' + styles.preview).textContent = ''
-              try {
-                let fn = new Function(compile(editor.state.doc.toString()))
-                fn()
-              } catch(e) {
-                print(e)
-              }
-            }
-          })
-        ]
+          EditorView.updateListener.of((v) => {
+            if (v.docChanged) run(editor.state.doc.toString());
+          }),
+        ],
       }),
-      parent: parent.current
-    })
-  }, [])
-  return <>
-    <div ref={parent}></div>
-    <div className={styles.preview} ></div>
-  </>
+      parent: parent.current,
+    });
+    run(editor.state.doc.toString());
+  }, []);
+  return (
+    <>
+      <div ref={parent}></div>
+      <div className={styles.preview}>
+        {code.map((c, i) => (
+          <CodeBlock key={i} className="language-js">
+            {c}
+          </CodeBlock>
+        ))}
+      </div>
+    </>
+  );
 }
 
 export default function Playground() {
   return (
     <Layout>
-      <h1>Playground</h1>
-      <div className={styles.playground}>
-        <BrowserOnly fallback={<div>Loading...</div>}>
-          {() => {
-            return <CodeEditor />
-          }}
-        </BrowserOnly>
+      <div className={"container"}>
+        <h1>Playground</h1>
+        <div className={styles.playground}>
+          <BrowserOnly fallback={<div>Loading...</div>}>
+            {() => {
+              return <CodeEditor />;
+            }}
+          </BrowserOnly>
+        </div>
       </div>
     </Layout>
   );
