@@ -15,12 +15,9 @@ I am creating a programming language named Unv. So I wanted to implement comment
 
 Vist the [Unv website](https://unv.vercel.app/docs/tutorial/comments) for more info.
 
-Comments can be classified by:
-
--   style (inline/block)
--   parse rules (ignored/interpolated/stored in memory)
--   recursivity (nestable/non-nestable)
--   uses (docstrings/throwaway comments/other)
+There are 2 types of comments.
+- inline comments
+- block comments
 
 ## Inline comments
 
@@ -34,7 +31,10 @@ Python is using a `#` sign to define it.
 ```py
 # This is an inline comment
 ```
-C-like syntax is more popular (I think), But python comments are more clear for me. They are differ from other symbol used in code and easy to understand(with or without syntax highlighting). Please write your thoughts as comments.
+C-like syntax is more popular (I think), But python comments are more clear for me. They are differ from other symbol used in code and easy to understand(with or without syntax highlighting).
+
+So Unv comments are similar to Python.
+You can try it on the [playground](https://unv.vercel.app/playground).
 
 ## Block comments
 Block comments are generally those that use a delimiter to indicate the beginning of a comment, and another delimiter to indicate the end of a comment. In this context, whitespace and newline characters are not counted as delimiters.
@@ -51,6 +51,7 @@ In python normally you should use many inline comments to define a block comment
 # block
 # comment
 ```
+It's valid for Unv too. You can try it on the [playground](https://unv.vercel.app/playground).
 But you can use a multiline string to define a block comment.
 ```py
 """
@@ -59,7 +60,15 @@ block
 comment
 """
 ```
-In Unv programming language, strings are always multiline. So I had created a new syntax,
+In Unv programming language, strings are always multiline. So similar code is always valid for Unv.
+```py
+"
+This is a
+block
+comment
+"
+```
+You can try it on the [playground](https://unv.vercel.app/playground#if%20'Unv%20is%20awesome!'%0A%20%20%20%20print('Hello%20World!')%0A%23%20keep%20editing%20for%20live%20results%0A%22%0AThis%20is%20a%0Ablock%0Acomment%0A%22%0A).
 ```coffee
 ###
 This is a
@@ -67,6 +76,6 @@ block
 comment
 ###
 ```
-Oh it was used by CoffeeScript.
+Oh it was already used by CoffeeScript. for Unv You can try it on the [playground](https://site-git-edit-unv.vercel.app/playground#if%20'Unv%20is%20awesome!'%0A%20%20%20%20print('Hello%20World!')%0A%23%20keep%20editing%20for%20live%20results%0A%23%23%23%0AThis%20is%20a%0Ablock%0Acomment%0A%23%23%23%0A)
 
 They are my favourites. If you have ideas please let me know. You can contact me via ksengine.github@gmail.com . 
