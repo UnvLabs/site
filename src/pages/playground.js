@@ -78,7 +78,9 @@ function CodeEditor() {
       return console.log(...args);
     };
 
-    window.number = (v) => +v;
+    window.float = (v) => +v;
+
+    window.int = (v) => Math.floor(+v);
 
     window.string = (v) => v + "";
 
