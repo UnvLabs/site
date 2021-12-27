@@ -1,7 +1,7 @@
 ---
 sidebar_position: 4
 ---
-## Numbers
+# Numbers
 
 Variables of numeric types are created when you assign a value to them:
 
