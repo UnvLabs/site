@@ -39,7 +39,7 @@ function compile(input) {
             vars.length > 1 ? `var ${vars.slice(1).join(",")}\n` : ""
           }var ${vars
             .map((a) => (~a.indexOf(",") ? `[${a}]` : a))
-            .join("=")}=${end}`;
+            .join("=")}=$assign(${end})`;
         }) + "\n";
     }
   }
@@ -84,7 +84,7 @@ function CodeEditor() {
 
     window.type = (v) => typeof v;
 
-    window.$destructure = (...args) => (args.length == 1 ? args[0] : args);
+    window.$assign = (...args) => (args.length == 1 ? args[0] : args);
 
     let run = (doc) => {
       window.location.hash = encodeURIComponent(doc);
