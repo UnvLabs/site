@@ -8,7 +8,7 @@ image: comments.svg
 Many programming languages are using comments. But they are using different syntax for it. I am going to choose the best syntax.
 
 <!--truncate-->
-
+[comments](comments.svg)
 In computer programming, a **comment** is a programmer-readable explanation or annotation in the source code of a computer program. They are added with the purpose of making the source code easier for humans to understand, and are generally ignored by compilers and interpreters. The syntax of comments in various programming languages varies considerably.
 
 I am creating a programming language named Unv. So I wanted to implement comments.
