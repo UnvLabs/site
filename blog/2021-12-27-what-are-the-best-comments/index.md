@@ -3,7 +3,7 @@ title: What are the best comments?
 description: What is the best comment syntax for programming?
 authors: ksengine
 tags: [unv, python, c, javascript, comments]
-image: comments.png
+image: comments.svg
 ---
 Many programming languages are using comments. But they are using different syntax for it. I am going to choose the best syntax.
 
