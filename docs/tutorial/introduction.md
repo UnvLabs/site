@@ -3,11 +3,14 @@ sidebar_position: 1
 ---
 # Introduction
 ## What is Unv?
-Unw is a new programming language. Created by Kavindu Santhusa.
+Unv is a new programming language. Created by Kavindu Santhusa.
 
 ## You can use it for
 
-Any programme
+- Web applications
+- desktop aplications
+- IOT
+- Genrally any program
 
 ## What can Unv do?
 - create a server
@@ -20,7 +23,7 @@ Any programme
 
 - It's truly cross platform.
 - Syntax is simple
-- You can write humen friendly code
+- You can write human friendly code
 - Always compiled to another language
 - Use for procedural, object-oriented or functional programming
 
