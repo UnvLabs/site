@@ -15,6 +15,8 @@ A variable is created the moment you first assign a value to it.
 
 ### Example
 ```py
+import print from 'standard'
+
 x =  5  
 y =  "John"  
 print(x)  
@@ -25,6 +27,8 @@ Don't change the type of variable after they have been set.
 
 ### Example
 ```py
+import print from 'standard'
+
 x =  4 # x is of type int  
 x =  "Sally"  # x is now of type str  
 print(x)
@@ -47,6 +51,8 @@ You can get the data type of a variable with the  `type()`  function.
 
 ### Example
 ```py
+import print from 'standard'
+
 x =  5  
 y =  "John"  
 print(type(x))  
