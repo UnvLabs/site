@@ -5,7 +5,7 @@ import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup";
 import { python } from "@codemirror/lang-python";
 import styles from "./playground.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
-import {format as prettyFormat} from 'pretty-format';
+import { format as prettyFormat } from "pretty-format";
 
 function compile(input) {
   input = input.replace(
@@ -34,14 +34,19 @@ function compile(input) {
         indents.shift();
       }
       output +=
-        line.replace(/^([\w\s,=]+)=(.*)/, (_, start, end) => {
-          let vars = start.split("=");
-          return `${
-            vars.length > 1 ? `var ${vars.slice(1).join(",")}\n` : ""
-          }var ${vars
-            .map((a) => (~a.indexOf(",") ? `[${a}]` : a))
-            .join("=")}=$assign(${end})`;
-        }) + "\n";
+        line
+          .replace(
+            /^(\s*)import\s([^]+?)\sfrom/,
+            (_, ws, names) => ws + "import {" + names + "} from"
+          )
+          .replace(/^([\w\s,=]+)=(.*)/, (_, start, end) => {
+            let vars = start.split("=");
+            return `${
+              vars.length > 1 ? `var ${vars.slice(1).join(",")}\n` : ""
+            }var ${vars
+              .map((a) => (~a.indexOf(",") ? `[${a}]` : a))
+              .join("=")}=$assign(${end})`;
+          }) + "\n";
     }
   }
   return output;
@@ -63,12 +68,7 @@ function CodeEditor() {
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
     let print = (...args) => {
-      window.setCode([
-        ...window.code,
-        args
-          .map(prettyFormat)
-          .join(" "),
-      ]);
+      window.setCode([...window.code, args.map(prettyFormat).join(" ")]);
 
       return console.log(...args);
     };
