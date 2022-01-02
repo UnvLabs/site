@@ -45,7 +45,7 @@ function compile(input) {
               let code = "";
               let vars = start.split("=");
               // choose the right keyword(let or var)
-              let jskeyword = keyword == "local" ? "let" : "var";
+              let jskeyword = keyword[0] == "l" ? "let" : "var";
  
               // declare variables
               if (vars.length > 1)
@@ -66,7 +66,7 @@ function compile(input) {
                   .join("=");
 
               // handle global variables
-              if (keyword == "global")
+              if (keyword[0] == "g)
                 code +=
                   "=" +
                   vars
