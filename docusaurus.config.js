@@ -14,7 +14,7 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'Unvlabs',
-  projectName: 'The UNV site',
+  projectName: 'site',
 
   presets: [
     [
