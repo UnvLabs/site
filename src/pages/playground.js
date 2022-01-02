@@ -70,7 +70,7 @@ function compile(input) {
                 code +=
                   "=" +
                   vars
-                    .map((v) => (~v.indexOf(",") ? "[window." + v.split(",").join("window.") + "]" : "window." + v))
+                    .map((v) => (~v.indexOf(",") ? "[window." + v.split(",").join(",window.") + "]" : "window." + v))
                     .join("=");
 
               // unpack arrays
