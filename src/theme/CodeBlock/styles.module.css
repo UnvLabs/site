@@ -42,6 +42,7 @@
   border-radius: var(--ifm-global-radius);
 }
 
+.editButton,
 .copyButton {
   background: rgba(0, 0, 0, 0.3);
   border-radius: var(--ifm-global-radius);
@@ -55,9 +56,17 @@
   transition: opacity 200ms ease-in-out;
 }
 
+.editButton {
+  right: calc(var(--ifm-pre-padding) / 2);
+  bottom: calc(var(--ifm-pre-padding) / 2);
+}
+
 .codeBlockTitle:hover + .codeBlockContent .copyButton,
 .codeBlockContent:hover > .copyButton,
-.copyButton:focus {
+.copyButton:focus,
+.codeBlockTitle:hover + .codeBlockContent .editButton,
+.codeBlockContent:hover > .editButton,
+.editButton:focus {
   opacity: 1;
 }
 
