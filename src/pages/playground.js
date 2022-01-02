@@ -39,14 +39,32 @@ function compile(input) {
             /^(\s*)import\s([^]+?)\sfrom/,
             (_, ws, names) => ws + "import {" + names + "} from"
           )
-          .replace(/^([\w\s,=]+)=(.*)/, (_, start, end) => {
-            let vars = start.split("=");
-            return `${
-              vars.length > 1 ? `var ${vars.slice(1).join(",")}\n` : ""
-            }var ${vars
+          .replace(
+            /^(\s*)(local\s|global\s)?([\w\s,=]+)=(.*)/,
+            (_, ws, keyword, start, end) => {
+              let code = "";
+              let vars = start.split("=");
+              // declare variables
+              code +=
+                ws +
+                // choose the right keyword(let or var)
+                (keyword == "local" ? "let" : "var") +
+                " " +
+                vars
+                  .map((v) => (~v.indexOf(",") ? "[" + v + "]" : v))
+                  .join("=");
+              // assign values
+              code += "=$assign(" + end + ")";
+              return code;
+
+              /*return `${
+              vars.length > 1 ? `${ws}${keyword}${vars.slice(1).join(",")}\n` : ""
+            }${ws}${keyword}${vars
               .map((a) => (~a.indexOf(",") ? `[${a}]` : a))
               .join("=")}=$assign(${end})`;
-          }) + "\n";
+          */
+            }
+          ) + "\n";
     }
   }
   return output;
@@ -67,11 +85,11 @@ function CodeEditor() {
     setMounted(true);
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
-    let print = window.print = (...args) => {
+    let print = (window.print = (...args) => {
       window.setCode([...window.code, args.map(prettyFormat).join(" ")]);
 
       return console.log(...args);
-    };
+    });
 
     window.$assign = (...args) => (args.length == 1 ? args[0] : args);
 
