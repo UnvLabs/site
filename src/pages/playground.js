@@ -67,7 +67,7 @@ function CodeEditor() {
     setMounted(true);
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
-    let print = (...args) => {
+    let print = window.print = (...args) => {
       window.setCode([...window.code, args.map(prettyFormat).join(" ")]);
 
       return console.log(...args);
@@ -112,7 +112,9 @@ function CodeEditor() {
       state: EditorState.create({
         doc:
           decodeURIComponent(window.location.hash.slice(1)) ||
-          `if 'Unv is awesome!'
+          `import print from 'standard'
+
+if 'Unv is awesome!'
     print('Hello World!')
 # keep editing for live results
 `,
