@@ -19,7 +19,7 @@ import {
 } from "@docusaurus/theme-common";
 import usePrismTheme from "@theme/hooks/usePrismTheme";
 
-import styles from "@theme-original/CodeBlock/styles.module.css";
+import styles from "./styles.module.css";
 
 export default function CodeBlock({
   children,
