@@ -59,6 +59,7 @@
 .editButton {
   right: calc(var(--ifm-pre-padding) / 2);
   bottom: calc(var(--ifm-pre-padding) / 2);
+  top: auto;
 }
 
 .codeBlockTitle:hover + .codeBlockContent .copyButton,
