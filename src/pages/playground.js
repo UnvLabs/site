@@ -44,25 +44,39 @@ function compile(input) {
             (_, ws, keyword, start, end) => {
               let code = "";
               let vars = start.split("=");
+              // choose the right keyword(let or var)
+              let jskeyword = keyword == "local" ? "let" : "var";
+ 
               // declare variables
+              if (vars.length > 1)
+                code +=
+                  ws +
+                  jskeyword +
+                  " " +
+                  vars.slice(1).join(",") +
+                  "\n";
+
+              // assign values
               code +=
                 ws +
-                // choose the right keyword(let or var)
-                (keyword == "local" ? "let" : "var") +
+                jskeyword +
                 " " +
                 vars
                   .map((v) => (~v.indexOf(",") ? "[" + v + "]" : v))
                   .join("=");
-              // assign values
-              code += "=$assign(" + end + ")";
-              return code;
 
-              /*return `${
-              vars.length > 1 ? `${ws}${keyword}${vars.slice(1).join(",")}\n` : ""
-            }${ws}${keyword}${vars
-              .map((a) => (~a.indexOf(",") ? `[${a}]` : a))
-              .join("=")}=$assign(${end})`;
-          */
+              // handle global variables
+              if (keyword == "global")
+                code +=
+                  "=" +
+                  vars
+                    .map((v) => (~v.indexOf(",") ? "[window." + v.split(",").join("window.") + "]" : "window." + v))
+                    .join("=");
+
+              // unpack arrays
+              code += "=$assign(" + end + ")";
+
+              return code;
             }
           ) + "\n";
     }
