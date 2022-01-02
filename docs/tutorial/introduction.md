@@ -31,5 +31,7 @@ Any programme
 
 **Example**
 ```py
+import print from 'standard'
+
 print("Hello, World!")
 ```
