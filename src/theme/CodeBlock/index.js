@@ -177,12 +177,16 @@ export default function CodeBlock({
                 </Translate>
               )}
             </button>
-          </div>
-          <sup>
             <a target="blank" href={"/playground#" + encodeURIComponent(code)}>
-              Open in playground &#x2197;
+              <button
+                type="button"
+                aria-label="Edit code in playground"
+                className={clsx(styles.editButton, "clean-btn")}
+              >
+                {"▶"}
+              </button>
             </a>
-          </sup>
+          </div>
         </div>
       )}
     </Highlight>
