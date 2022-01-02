@@ -66,7 +66,7 @@ function compile(input) {
                   .join("=");
 
               // handle global variables
-              if (keyword[0] == "g)
+              if (keyword[0] == "g")
                 code +=
                   "=" +
                   vars
