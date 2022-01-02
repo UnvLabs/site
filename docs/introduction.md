@@ -2,9 +2,6 @@
 sidebar_position: 1
 ---
 # Why Unv?
-
-> I had learned many programming languages. This is my attempt to create a unique one for any platform.
->
-> _Kavindu Santhusa (Creater)_
-
-Currently Unv is in development.
+--
+There are languages none we can use universally . Unv is a attempt to make a simple one for this purpose.With simple syntax similar to python , it can be used pretty pleasntly for anything.
+**Here's a taste of UNV :**
