@@ -61,7 +61,7 @@ function CodeEditor() {
     setMounted(true);
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
-    window.print = (...args) => {
+    let print = (...args) => {
       window.setCode([
         ...window.code,
         args
@@ -78,30 +78,39 @@ function CodeEditor() {
       return console.log(...args);
     };
 
-    window.float = (v) => +v;
-
-    window.int = (v) => Math.floor(+v);
-
-    window.string = (v) => v + "";
-
-    window.type = (v) => typeof v;
-
     window.$assign = (...args) => (args.length == 1 ? args[0] : args);
+
+    window.require = (path) => {
+      return {
+        standard: {
+          float: (v) => +v,
+          number: (v) => +v,
+          int: (v) => Math.floor(+v),
+          string: (v) => v + "",
+          type: (v) => typeof v,
+          print,
+        },
+      }[path];
+    };
 
     let run = (doc) => {
       window.location.hash = encodeURIComponent(doc);
       window.setCode([]);
       try {
-        Import(sucrase).then(({ transform }) => {
-          let fn = new Function(
-            transform(compile(doc), {
-              transforms: ["typescript", "imports"],
-            }).code
-          );
-          fn();
-        });
-      } catch (e) {
-        print(e);
+        Import(sucrase)
+          .then(({ transform }) => {
+            let fn = new Function(
+              transform(compile(doc), {
+                transforms: ["typescript", "imports"],
+              }).code
+            );
+            fn();
+          })
+          .catch((error) => {
+            print(error);
+          });
+      } catch (error) {
+        print(error);
       }
     };
     let editor = new EditorView({
