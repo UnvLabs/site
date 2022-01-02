@@ -66,7 +66,7 @@ function CodeEditor() {
       window.setCode([
         ...window.code,
         args
-          .map((arg) => prettyFormat)
+          .map(prettyFormat)
           .join(" "),
       ]);
 
