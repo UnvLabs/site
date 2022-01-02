@@ -5,6 +5,7 @@ import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup";
 import { python } from "@codemirror/lang-python";
 import styles from "./playground.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import {format as prettyFormat} from 'pretty-format';
 
 function compile(input) {
   input = input.replace(
@@ -65,13 +66,7 @@ function CodeEditor() {
       window.setCode([
         ...window.code,
         args
-          .map((arg) => {
-            if (arg.toString === Object.prototype.toString)
-              try {
-                return JSON.stringify(arg, undefined, 2);
-              } catch {}
-            return arg + "";
-          })
+          .map((arg) => prettyFormat)
           .join(" "),
       ]);
 
