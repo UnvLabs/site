@@ -32,5 +32,4 @@ Both integers and floating point numbers except `0` are assumed to be `true` if 
 ```py
 print(boolean(234)) # => true
 print(boolean(0)) # => false
-```py
-
+```
