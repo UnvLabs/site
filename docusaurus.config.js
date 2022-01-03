@@ -6,14 +6,14 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Unv language',
-  tagline: 'Universal programming language',
+  title: 'The Unv language',
+  tagline: 'The Universal programming language',
   url: 'https://unv.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'unvlabs',
+  organizationName: 'Unvlabs',
   projectName: 'site',
 
   presets: [
