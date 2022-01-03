@@ -57,7 +57,7 @@ x =  5
 y =  "John"  
 print(type(x))  
 print(type(y))
-# Returns int and string respectivley
+# Returns number and string respectivley
 ```
 
 ## Single or Double Quotes?
