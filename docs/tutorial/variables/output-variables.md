@@ -5,7 +5,7 @@ sidebar_position: 4
 
 ## Output Variables
 
-The Unv  `print`  function is often used to output variables.
+The Unv  `print`  function is often used to output variables and text
 
 To combine both text and a variable, Unv uses the  `+`  character:
 
@@ -40,7 +40,7 @@ y =  10
 print(x + y)
 ```
 
-If you try to combine a string and a number, It's working, **but it's highly discouraged.**
+If you try to combine a string and a number, It's working, **but highly discouraged.**
 
 ### Example
 ```py
