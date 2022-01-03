@@ -30,9 +30,9 @@ Don't change the type of variable after they have been set.
 import print from 'standard'
 
 x =  4 # x is of type int  
-x =  "Sally"  # x is now of type str  
+x =  "Sally"  # x is now a string
 print(x)
-# Bad code
+# This is bad code - hanging the type of varible is NOT good practice
 ```
 
 ## Casting
@@ -57,6 +57,7 @@ x =  5
 y =  "John"  
 print(type(x))  
 print(type(y))
+# Returns int and string respectivley
 ```
 
 ## Single or Double Quotes?
@@ -69,8 +70,8 @@ x =  "John"
 # is the same as  
 x =  'John'
 ```
-
-## Case-Sensitive
+At the present there's no diffrence in UNV unlike other langauges.
+## Yes , There case-sensitive
 
 Variable names are case-sensitive.
 
