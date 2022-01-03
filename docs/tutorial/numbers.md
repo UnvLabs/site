@@ -30,8 +30,6 @@ z = -87.7e100
 ```
 Both integers and floating point numbers are asumed to be true if queried ,unless the have an e,
 **SO:**
-[example](https://unv.vercel.app/playground#import%20print%20from%20'standard'%0A%0Aif%206.457%0A%20%20%20%20print('Hello%20World!')%0A%23%20keep%20editing%20for%20live%20results%0A)
-That works.
+[This works](https://unv.vercel.app/playground#import%20print%20from%20'standard'%0A%0Aif%206.457%0A%20%20%20%20print('Hello%20World!')%0A%23%20keep%20editing%20for%20live%20results%0A)
 **BUT**
-[exmaple two](https://unv.vercel.app/playground#import%20print%20from%20'standard'%0A%0Aif%206e.457%0A%20%20%20%20print('Hello%20World!')%0A%23%20keep%20editing%20for%20live%20results%0A)
-this doesnt
+[This doesn't](https://unv.vercel.app/playground#import%20print%20from%20'standard'%0A%0Aif%206e.457%0A%20%20%20%20print('Hello%20World!')%0A%23%20keep%20editing%20for%20live%20results%0A)
