@@ -3,7 +3,7 @@ sidebar_position: 2
 ---
 # Comments
 ---
-Comments are used to explain code or to tell the compiler or runtime to ignore these lines.Thses lines are esentially invisible to the compiler or runtime.
+Comments are used to explain code or to tell the compiler or runtime to ignore these lines. These lines are essentially ignored by the compiler or runtime.
 
 ## Creating a Comment
 
