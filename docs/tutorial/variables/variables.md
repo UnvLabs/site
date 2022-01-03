@@ -70,7 +70,7 @@ x =  "John"
 # is the same as  
 x =  'John'
 ```
-At the present there's no diffrence in UNV unlike other langauges.
+At the present there's no diffrence in UNV , **unlike** other langauges.
 ## Yes , There case-sensitive
 
 Variable names are case-sensitive.
