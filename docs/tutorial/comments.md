@@ -2,9 +2,8 @@
 sidebar_position: 2
 ---
 # Comments
-
-1. Comments can be used to explain Unv code.
-2. Comments can be used to prevent execution when testing code.
+---
+Comments are used to explain code or to tell the compiler or runtime to ignore these lines.Thses lines are esentially invisible to the compiler or runtime.
 
 ## Creating a Comment
 
@@ -12,10 +11,7 @@ Comments starts with a #, and Unv will ignore them:
 
 **Example**
 ```py {1}
-import print from 'standard'
-
 #This is a comment
-print("Hello, World!")
 ```
 
 Comments can be placed at the end of a line, and Unv will ignore the rest of the line:
@@ -24,7 +20,7 @@ Comments can be placed at the end of a line, and Unv will ignore the rest of the
 ```py
 import print from 'standard'
 
-print("Hello, World!") #This is a comment
+print("Hello, World!") # Ignored from this point forth
 ```
 
 A comment does not have to be text that explains the code, it can also be used to prevent Unv from executing code:
