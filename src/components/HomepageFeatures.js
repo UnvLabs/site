@@ -9,7 +9,7 @@ const FeatureList = [
     description: (
       <>
         The syntax of Unv language is inspired by Python. So It's nearly similar to English.
-        instead of too many brackets or depending on whitespace.
+        Instead of too many brackets, it depends on whitespaces.
       </>
     ),
   },
