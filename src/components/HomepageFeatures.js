@@ -8,8 +8,8 @@ const FeatureList = [
     icon: '🍬',
     description: (
       <>
-        The syntax of Unv language is inspired by Python. So It's nearly similar to English.
-        instead of too many brackets ot depends on whitespace.
+        The sytnax of UNV is inspired by python.So ,
+        instead of too many brackets, it depends on whitespaces.
       </>
     ),
   },
