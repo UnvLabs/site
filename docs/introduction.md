@@ -14,7 +14,6 @@ We can't use one langauge for everything. Unv is a attempt to make a simple one 
 - Web
 - IOT
 - pretty much anything else
-<br>
 **Here's a taste of UNV :**
 ```
 import 'print' from 'standard'
