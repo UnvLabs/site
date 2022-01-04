@@ -99,26 +99,30 @@ function CodeEditor() {
     setMounted(true);
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
-    let print = (window.print = (...args) => {
+    let print = (...args) => {
       window.setCode([...window.code, args.map(prettyFormat).join(" ")]);
 
       return console.log(...args);
-    });
+    };
 
     window.$assign = (...args) => (args.length == 1 ? args[0] : args);
 
+    let standard: {
+      float: (v) => +v,
+      number: (v) => +v,
+      int: (v) => Math.floor(+v),
+      string: (v) => v + "",
+      type: (v) => typeof v,
+      print,
+    }
+
     window.require = (path) => {
       return {
-        standard: {
-          float: (v) => +v,
-          number: (v) => +v,
-          int: (v) => Math.floor(+v),
-          string: (v) => v + "",
-          type: (v) => typeof v,
-          print,
-        },
+        standard,
       }[path];
     };
+
+    Object.assign(window, standard);
 
     let run = (doc) => {
       window.location.hash = encodeURIComponent(doc);
