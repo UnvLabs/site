@@ -107,7 +107,7 @@ function CodeEditor() {
 
     window.$assign = (...args) => (args.length == 1 ? args[0] : args);
 
-    let standard: {
+    let standard = {
       float: (v) => +v,
       number: (v) => +v,
       int: (v) => Math.floor(+v),
