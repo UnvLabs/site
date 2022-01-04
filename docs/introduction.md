@@ -9,7 +9,6 @@ We can't use one langauge for everything. Unv is a attempt to make a simple one 
 - JS
 - Python
 - *More to come*
- <br>
 **It can be used for:**
 - Web
 - IOT
