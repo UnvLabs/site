@@ -13,7 +13,7 @@ let declare_var = (ws, keyword, names) => {
 
   // declare variables
   if (vars.length > 1)
-    code += ws + jskeyword + " " + vars.slice(1).join(",") + "\n";
+    code += ws + keyword + " " + vars.slice(1).join(",") + "\n";
 
   // assign values
   code +=
@@ -59,7 +59,7 @@ function compile(input) {
             (_, ws, names) => ws + "import {" + names + "} from"
           )
           .replace(
-            /^(\s*)(local\s|global\s)?([\w\s,=]+)=(.*)/,
+            /^(\s*)((?:local\s|global\s)?)([\w\s,=]+)=(.*)/,
             (_, ws, keyword, start, end) => {
               // choose the right keyword(let or var)
               let code = declare_var(
