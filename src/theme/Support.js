@@ -1,4 +1,5 @@
 import React from "react";
+import Admonition from '@theme/Admonition';
 
 let runtimes = {
   py: "Python",
@@ -8,8 +9,7 @@ let runtimes = {
 
 export default function Support(props) {
   return (
-    <div>
-      <b>Supported Runtimes</b>
+    <Admonition type="info" title="Supported Runtimes">
       <ul>
         {Object.entries(runtimes).map(([name, runtime], index) => (
           <li key={index}>
@@ -20,6 +20,6 @@ export default function Support(props) {
           </li>
         ))}
       </ul>
-    </div>
+    </Admonition>
   );
 }
