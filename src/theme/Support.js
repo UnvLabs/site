@@ -1,3 +1,5 @@
+import React from "react";
+
 let runtimes = {
   py: "Python",
   js: "JavaScript",
