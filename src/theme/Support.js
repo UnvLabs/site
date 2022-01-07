@@ -1,4 +1,5 @@
 import Admonition from "@theme/Admonition";
+import Link from "@docusaurus/Link";
 import React from "react";
 
 let runtimes = {
@@ -13,7 +14,9 @@ export default function Support(props) {
       <ul>
         {Object.entries(runtimes).map(([name, runtime], index) => (
           <li key={index}>
-            {props[name] ? "✔️" : "❌"} {runtime}
+            <Link to={"/runtimes/" + name}>
+              {props[name] ? "✔️" : "❌"} {runtime}
+            </Link>
           </li>
         ))}
       </ul>
