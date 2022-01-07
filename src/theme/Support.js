@@ -1,4 +1,4 @@
-import Admonition from "@theme-original/Admonition";
+import Admonition from "@theme/Admonition";
 import React from "react";
 
 let runtimes = {
@@ -13,10 +13,7 @@ export default function Support(props) {
       <ul>
         {Object.entries(runtimes).map(([name, runtime], index) => (
           <li key={index}>
-            <label>
-              <input type="checkbox" checked={props[name]} readOnly={true} />
-              {runtime}
-            </label>
+            {props[name] ? "✔️" : "❌"} {runtime}
           </li>
         ))}
       </ul>
