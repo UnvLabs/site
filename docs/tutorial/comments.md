@@ -64,3 +64,7 @@ more than just one line
 ###
 print("Hello, World!")
 ```
+
+import Support from "@theme/support";
+
+<Support py js/>
