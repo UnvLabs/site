@@ -1,5 +1,5 @@
-import React from "react";
 import Admonition from "@theme-original/Admonition";
+import React from "react";
 
 let runtimes = {
   py: "Python",
