@@ -15,7 +15,7 @@ export default function Support(props) {
       <ul>
         {Object.entries(runtimes).map(([name, runtime], index) => (
           <li key={index}>
-            <Link to={"/runtimes/" + name}>
+            <Link to={"/runtimes/" + runtime.toLowerCase()}>
               {props[name] ? "✔️" : "❌"} {runtime}
             </Link>
           </li>
