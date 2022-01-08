@@ -1,41 +1,40 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require("prism-react-renderer/themes/github");
+const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'The Unv language',
-  tagline: 'The Universal programming language',
-  url: 'https://unv.vercel.app',
-  baseUrl: '/',
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-  organizationName: 'Unvlabs',
-  projectName: 'site',
+  title: "The Unv language",
+  tagline: "The Universal programming language",
+  url: "https://unv.vercel.app",
+  baseUrl: "/",
+  onBrokenLinks: "warn",
+  onBrokenMarkdownLinks: "warn",
+  favicon: "img/favicon.ico",
+  organizationName: "Unvlabs",
+  projectName: "site",
 
   presets: [
     [
-      'classic',
+      "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         googleAnalytics: {
-          trackingID: 'G-VDH8V2XCDX',
+          trackingID: "G-VDH8V2XCDX",
           anonymizeIP: true,
         },
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/unvlabs/site/edit/main/',
+          sidebarPath: require.resolve("./sidebars.js"),
+          editUrl: "https://github.com/unvlabs/site/edit/main/",
         },
         blog: {
           showReadingTime: true,
-          editUrl:
-            'https://github.com/unvlabs/site/edit/main/blog/',
+          editUrl: "https://github.com/unvlabs/site/edit/main/blog/",
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve("./src/css/custom.css"),
         },
       }),
     ],
@@ -45,45 +44,45 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'Unv Language',
+        title: "Unv Language",
         logo: {
-          alt: 'World needs an universal programming language.',
-          src: 'img/logo.svg',
+          alt: "World needs an universal programming language.",
+          src: "img/logo.svg",
         },
         items: [
-          { to: '/playground', label: 'Playground', position: 'left' },
+          { to: "/playground", label: "Playground", position: "left" },
           {
-            type: 'doc',
-            docId: 'tutorial/introduction',
-            position: 'left',
-            label: 'Tutorial',
+            type: "doc",
+            docId: "tutorial/introduction",
+            position: "left",
+            label: "Tutorial",
           },
-          { to: '/blog', label: 'Blog', position: 'left' },
+          { to: "/blog", label: "Blog", position: "left" },
           {
-            href: 'https://github.com/unvlabs/site',
-            label: 'GitHub',
-            position: 'right',
+            href: "https://github.com/unvlabs/site",
+            label: "GitHub",
+            position: "right",
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: "dark",
         links: [
           {
-            title: 'Docs',
+            title: "Docs",
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/tutorial/introduction',
+                label: "Tutorial",
+                to: "/docs/tutorial/introduction",
               },
             ],
           },
           {
-            title: 'Community',
+            title: "Community",
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/unv',
+                label: "Stack Overflow",
+                href: "https://stackoverflow.com/questions/tagged/unv",
               },
               // {
               //   label: 'Discord',
@@ -96,19 +95,19 @@ const config = {
             ],
           },
           {
-            title: 'More',
+            title: "More",
             items: [
               {
-                label: 'Playground',
-                to: '/playground',
+                label: "Playground",
+                to: "/playground",
               },
               {
-                label: 'Blog',
-                to: '/blog',
+                label: "Blog",
+                to: "/blog",
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/unvlabs/site',
+                label: "GitHub",
+                href: "https://github.com/unvlabs/site",
               },
             ],
           },
