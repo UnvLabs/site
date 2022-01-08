@@ -6,6 +6,7 @@ import { python } from "@codemirror/lang-python";
 import styles from "./playground.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import { format as prettyFormat } from "pretty-format";
+
 let STRING = /"(?:\\["\\]|[^"\\])*"/;
 let TOKENMAP = {
   inline_comment: /#.*/,
@@ -41,7 +42,6 @@ function compile(input) {
   let sqb = 0;
   let parens = 0;
   let braces = 0;
-  let scope = [];
 
   while ((block = RE.exec(input))) {
     let token = block[0];
@@ -62,19 +62,17 @@ function compile(input) {
         }
         let ws = output.match(/[\n\r]+(\s*)$/) || [""];
         indents.unshift(ws[0].length);
-        scope.unshift([].concat(...scope));
         isBlock = true;
       }
 
       // EG:- `import a, b from "path"` => `import { a, b } from "path"`
       else if (token == "import") token += "{";
       else if (token == "from") token += "}";
-
-      if (token == "in") {
+      else if (token == "in") {
         output.replace(
-          /^([\w\s,]+)\s$/,
-          (_, names) =>
-            "let " +
+          /(var\s)?([\w\s,]+)\s$/,
+          (_, kw, names) =>
+            kw.replace("var", "let") +
             names
               .split("=")
               .map((v) => (~v.indexOf(",") ? "[" + v + "]" : v))
@@ -94,36 +92,21 @@ function compile(input) {
       else if (token == "}") braces -= 1;
       else if (token == "=") {
         // EG:- `a, b = c = [1, 2]` => `let a,b; [a, b] = c = [1, 2];`
-        output.replace(
-          /([ \t]*)((global\s)?)([\w\s,=]+)$/,
-          (_, ws, global, names) => {
-            let code = "";
+        output.replace(/(var\s)?([\w\s,=]+)$/, (_, kw, names) => {
+          let code = "";
 
+          if (kw) {
             let vars = names.split(/\s*[=,]\s*/);
-            let toDeclare = vars.filter((v) => !scope[0].includes(v));
-            code += "let " + toDeclare.join() + ";";
-
-            code += names
-              .split("=")
-              .map((v) => (~v.indexOf(",") ? "[" + v + "]" : v))
-              .join("=");
-
-            // global variables
-            if (global)
-              code +=
-                "=" +
-                names
-                  .split("=")
-                  .map((v) =>
-                    ~v.indexOf(",")
-                      ? "[window." + v.split(",").join(",window.") + "]"
-                      : "window." + v
-                  )
-                  .join("=");
-
-            return code;
+            code += kw.replace("var", "let") + vars.join() + ";";
           }
-        );
+
+          code += names
+            .split("=")
+            .map((v) => (~v.indexOf(",") ? "[" + v + "]" : v))
+            .join("=");
+
+          return code;
+        });
 
         // EG:- `a = 1, 2` => `a = [1, 2]`
         token += "$assign(";
@@ -148,7 +131,6 @@ function compile(input) {
         if (indent < spaces) break;
         token = "}" + token;
         indents.shift();
-        scope.shift();
       }
     }
 
