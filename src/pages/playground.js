@@ -44,7 +44,7 @@ function compile(input) {
   let scope = [];
 
   while ((block = RE.exec(input))) {
-    token = block[0];
+    let token = block[0];
 
     // inline comment
     if (block[1]) token = "//" + token.slice(1);
