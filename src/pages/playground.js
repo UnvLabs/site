@@ -50,8 +50,7 @@ function compile(input) {
     // comments
     if (block[1] || block[2]) token = " ";
     // multiline strings
-    else if (block[4]) token = "`" + token.slice(1, -1) + "`";
-    else if (block[5]) token = "`" + token.slice(1, -1) + "`";
+    else if (block[4] || block[5]) token = token.replace(/\r\n|\r|\n/g, "\\n");
     else if (block[6]) {
       if (/if|else|switch|try|catch|function|class|do|while|for/.test(token)) {
         if (!/function|try|class/.test(token)) {
