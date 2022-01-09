@@ -1,44 +1,46 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './HomepageFeatures.module.css';
+import React from "react";
+import clsx from "clsx";
+import styles from "./HomepageFeatures.module.css";
 
 const FeatureList = [
   {
-    title: 'Syntax sugar',
-    icon: '🍬',
+    title: "Syntax sugar",
+    icon: "🍬",
     description: (
       <>
-        The sytnax of UNV is inspired by python.So ,
-        instead of too many brackets, it depends on whitespaces.
+        The syntax of Unv language is inspired by Python. So It{"'"}s nearly
+        similar to English. instead of too many brackets, it depends on
+        whitespaces.
       </>
     ),
   },
   {
-    title: 'Universal',
-    icon: '🌐',
+    title: "Universal",
+    icon: "🌐",
     description: (
       <>
-        Compilers convert Unv language to existing languages.(currently JavaScript, more coming soon).
-        Use Unv for your web, mobile, desktop or IOT application.
+        Compilers convert Unv language to existing languages.(currently
+        JavaScript, more coming soon). Use Unv for your web, mobile, desktop or
+        IOT application.
       </>
     ),
   },
   {
-    title: 'Friendly',
-    icon: '🤝',
+    title: "Friendly",
+    icon: "🤝",
     description: (
-      <>
-        As Unvlang is universal, It can import your favourite library.
-      </>
+      <>As Unvlang is universal, It can import your favourite library.</>
     ),
   },
 ];
 
-function Feature({icon, title, description}) {
+function Feature({ icon, title, description }) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className={clsx("col col--4")}>
       <div className="text--center">
-        <p className={styles.featureIcon} alt={title}>{icon}</p>
+        <p className={styles.featureIcon} alt={title}>
+          {icon}
+        </p>
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>

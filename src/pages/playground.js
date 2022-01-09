@@ -7,79 +7,135 @@ import styles from "./playground.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import { format as prettyFormat } from "pretty-format";
 
+let STRING = /"(?:\\["\\]|[^"\\])*"/;
+let TOKENMAP = {
+  inline_comment: /#.*/,
+  block_comment: /###[^]*?###/,
+  whitespace: /\s+/,
+  single_string: STRING.source.replace(/"/g, "'"),
+  double_string: STRING,
+  name: /[a-zA-Z_]\w*/,
+  number: /^\d*\.?\d+/,
+  char: /./,
+};
+
+let RE =
+  /(#.*)|(###[^]*?###)|(\s+)|('(?:\\['\\]|[^'\\])*')|("(?:\\["\\]|[^"\\])*")|([a-zA-Z_]\w*)|(^\d*\.?\d+)|(.)/g;
+
+/* for development
+RE = Object.entries(TOKENMAP)
+  .map(([k, v]) => `(?<${k}>${v.source || v})`)
+  .join("|");
+*/
+/* for production
+RE = Object.values(TOKENMAP)
+  .map((v) => `(${v.source || v})`)
+  .join("|");
+*/
+
 function compile(input) {
-  input = input.replace(
-    /("(?:\\["\\]|[^"\\])*"|'(?:\\['\\]|[^'\\])*')|###[^]*?###|#.*/gm,
-    (_, string) => (string ? string.replace(/\n/g, "\\n") : "")
-  );
-  let lines = input.split("\n");
-  let comment = false;
-  let indents = [];
   let output = "";
-  for (let line of lines) {
-    let statement = line.match(
-      /^(\s*)(if|else|switch|try|catch|(?:async\s+)?function\*?|class|do|while|for)\s+(.+)/
-    );
-    if (statement) {
-      let [, spaces, name, args] = statement;
-      indents.unshift(spaces.length);
-      output += `${spaces}${name} ${
-        /function|try|class/.test(name) ? args : `(${args})`
-      } {\n`;
-    } else {
-      let spaces = line.match(/^\s*/)[0].length;
+  let block;
+  let indents = [];
+  let isBlock = false;
+  let closeWith = "";
+  let sqb = 0;
+  let parens = 0;
+  let braces = 0;
+
+  while ((block = RE.exec(input))) {
+    let token = block[0];
+
+    // inline comment
+    if (block[1]) token = "//" + token.slice(1);
+    // block comment
+    else if (block[2]) token = "/*" + token.slice(3, -3) + "*/";
+    // multiline strings
+    else if (block[4]) token = "`" + token.slice(1, -1) + "`";
+    else if (block[5]) token = "`" + token.slice(1, -1) + "`";
+    else if (block[6]) {
+      if (/if|else|switch|try|catch|function|class|do|while|for/.test(token)) {
+        if (!/function|try|class/.test(token)) {
+          // EG:- `if condition` => `if(condition)`
+          closeWith = ")";
+          token += "(";
+        }
+        let ws = output.match(/[\n\r]+(\s*)$/) || [""];
+        indents.unshift(ws[0].length);
+        isBlock = true;
+      }
+
+      // EG:- `import a, b from "path"` => `import { a, b } from "path"`
+      else if (token == "import") token += "{";
+      else if (token == "from") token += "}";
+      else if (token == "in") {
+        output.replace(
+          /(var\s)?([\w\s,]+)\s$/,
+          (_, kw, names) =>
+            kw.replace("var", "let") +
+            names
+              .split("=")
+              .map((v) => (~v.indexOf(",") ? "[" + v + "]" : v))
+              .join("=")
+        );
+
+        // for...in to for...of
+        token = "of $iter(";
+        closeWith = "))";
+      }
+    } else if (block[8]) {
+      if (token == "(") parens += 1;
+      else if (token == ")") parens -= 1;
+      else if (token == "[") sqb += 1;
+      else if (token == "]") sqb -= 1;
+      else if (token == "{") braces += 1;
+      else if (token == "}") braces -= 1;
+      else if (token == "=") {
+        // EG:- `a, b = c = [1, 2]` => `let a,b; [a, b] = c = [1, 2];`
+        output.replace(/(var\s)?([\w\s,=]+)$/, (_, kw, names) => {
+          let code = "";
+
+          if (kw) {
+            let vars = names.split(/\s*[=,]\s*/);
+            code += kw.replace("var", "let") + vars.join() + ";";
+          }
+
+          code += names
+            .split("=")
+            .map((v) => (~v.indexOf(",") ? "[" + v + "]" : v))
+            .join("=");
+
+          return code;
+        });
+
+        // EG:- `a = 1, 2` => `a = [1, 2]`
+        token += "$assign(";
+        closeWith = ");";
+      }
+    } else if (/\n/.test(block[3]) && !sqb && !parens && !braces) {
+      // EG:- `if (condition` => `if (condition {`
+      if (isBlock) {
+        token = "{" + token;
+        isBlock = false;
+      }
+
+      // EG:- `if (condition {` => `if (condition) {`
+      if (closeWith) {
+        token = closeWith + token;
+        closeWith = "";
+      }
+
+      // EG:- `if (condition) { block` => `if (condition) { block }`
+      let spaces = token.match(/[\n\r]+(\s*)$/)[1].length;
       for (let indent of [...indents]) {
         if (indent < spaces) break;
-        output += `${" ".repeat(indent)}}\n`;
+        token = "}" + token;
         indents.shift();
       }
-      output +=
-        line
-          .replace(
-            /^(\s*)import\s([^]+?)\sfrom/,
-            (_, ws, names) => ws + "import {" + names + "} from"
-          )
-          .replace(
-            /^(\s*)(local\s|global\s)?([\w\s,=]+)=(.*)/,
-            (_, ws, keyword, start, end) => {
-              let code = "";
-              let vars = start.split("=");
-              // choose the right keyword(let or var)
-              let jskeyword = keyword[0] == "l" ? "let" : "var";
- 
-              // declare variables
-              if (vars.length > 1)
-                code +=
-                  ws +
-                  jskeyword +
-                  " " +
-                  vars.slice(1).join(",") +
-                  "\n";
-
-              // assign values
-              code +=
-                ws +
-                jskeyword +
-                " " +
-                vars
-                  .map((v) => (~v.indexOf(",") ? "[" + v + "]" : v))
-                  .join("=");
-
-              // handle global variables
-              if (keyword[0] == "g")
-                code +=
-                  "=" +
-                  vars
-                    .map((v) => (~v.indexOf(",") ? "[window." + v.split(",").join(",window.") + "]" : "window." + v))
-                    .join("=");
-
-              // unpack arrays
-              code += "=$assign(" + end + ")";
-
-              return code;
-            }
-          ) + "\n";
     }
+
+    // append token to output
+    output += token;
   }
   return output;
 }
@@ -99,26 +155,30 @@ function CodeEditor() {
     setMounted(true);
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
-    let print = (window.print = (...args) => {
+    let print = (...args) => {
       window.setCode([...window.code, args.map(prettyFormat).join(" ")]);
 
       return console.log(...args);
-    });
+    };
 
     window.$assign = (...args) => (args.length == 1 ? args[0] : args);
 
+    let standard = {
+      float: (v) => +v,
+      number: (v) => +v,
+      int: (v) => Math.floor(+v),
+      string: (v) => v + "",
+      type: (v) => typeof v,
+      print,
+    };
+
     window.require = (path) => {
       return {
-        standard: {
-          float: (v) => +v,
-          number: (v) => +v,
-          int: (v) => Math.floor(+v),
-          string: (v) => v + "",
-          type: (v) => typeof v,
-          print,
-        },
+        standard,
       }[path];
     };
+
+    Object.assign(window, standard);
 
     let run = (doc) => {
       window.location.hash = encodeURIComponent(doc);
