@@ -68,7 +68,7 @@ function compile(input) {
 
       // EG:- `import a, b from "path"` => `import { a, b } from "path"`
       else if (token == "import") token += "{";
-      else if (token == "from") token += "}";
+      else if (token == "from") token = "}" + token;
 
       if (token == "in") {
         output = output.replace(/for\(\s*(\w[\w\s,]*)$/, (_, names) => {
