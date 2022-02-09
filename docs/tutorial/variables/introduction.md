@@ -89,3 +89,8 @@ a =  4
 A =  "Sally"
 #A will not overwrite a
 ```
+
+import Support from "@theme/Support";
+
+<Support py js/>
+
