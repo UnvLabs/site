@@ -69,3 +69,7 @@ my_variable_name =  "John"
 ```
 
 > Snake Case is recommended.
+
+import Support from "@theme/Support";
+
+<Support py js/>
