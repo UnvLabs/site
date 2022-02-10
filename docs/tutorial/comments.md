@@ -11,8 +11,6 @@ sidebar_position: 4
 
 Comments starts with a #, and Unv will ignore them:
 
-**Example**
-
 ```py {1}
 import print from 'standard'
 
@@ -22,8 +20,6 @@ print("Hello, World!")
 
 Comments can be placed at the end of a line, and Unv will ignore the rest of the line:
 
-**Example**
-
 ```py
 import print from 'standard'
 
@@ -31,8 +27,6 @@ print("Hello, World!") #This is a comment
 ```
 
 A comment does not have to be text that explains the code, it can also be used to prevent Unv from executing code:
-
-**Example**
 
 ```py {1}
 import print from 'standard'
@@ -45,8 +39,6 @@ print("Cheers, Mate!")
 
 To comment in multiple lines you could insert a # for each line:
 
-**Example**
-
 ```py {1-3}
 import print from 'standard'
 
@@ -57,8 +49,6 @@ print("Hello, World!")
 ```
 
 Or, you can use a multiline comment.
-
-**Example**
 
 ```coffee {1-5}
 import print from 'standard'
