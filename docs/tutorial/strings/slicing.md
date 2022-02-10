@@ -39,6 +39,8 @@ By leaving out the  _end_ index, the range will go to the end:
 Get the characters from position 2, and all the way to the end:
 
 ```py
+import slice from "strings"
+
 b =  "Hello, World!"  
 print(slice(b, from=2))
 ```
@@ -54,6 +56,8 @@ From: "o" in "World!" (position -5)
 To, but not included: "d" in "World!" (position -2):
 
 ```py
+import slice from "strings"
+
 b =  "Hello, World!"  
 print(slice(b, from=-5, to=-2))
 ```
