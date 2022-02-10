@@ -14,8 +14,6 @@ Unv has no command for declaring a variable.
 
 A variable is created the moment you first assign a value to it.
 
-### Example
-
 ```py
 import print from 'standard'
 
@@ -26,8 +24,6 @@ print(y)
 ```
 
 Don't change the type of variable after they have been set.
-
-### Example
 
 ```py
 import print from 'standard'
@@ -42,8 +38,6 @@ print(x)
 
 If you want to specify the data type of a variable, this can be done with casting.
 
-### Example
-
 ```py
 x =  string(3) # x will be '3'
 y =  number(3) # y will be 3
@@ -52,8 +46,6 @@ y =  number(3) # y will be 3
 ## Get the Type
 
 You can get the data type of a variable with the `type()` function.
-
-### Example
 
 ```py
 import print from 'standard'
@@ -68,8 +60,6 @@ print(type(y))
 
 String variables can be declared either by using single or double quotes:
 
-### Example
-
 ```py
 x =  "John"
 # is the same as
@@ -79,8 +69,6 @@ x =  'John'
 ## Case-Sensitive
 
 Variable names are case-sensitive.
-
-### Example
 
 This will create two variables:
 
