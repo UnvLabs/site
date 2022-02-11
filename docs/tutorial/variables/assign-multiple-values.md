@@ -47,3 +47,8 @@ print(x)
 print(y)
 print(z)
 ```
+
+
+import Support from "@theme/Support";
+
+<Support py/>

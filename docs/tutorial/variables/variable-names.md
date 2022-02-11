@@ -68,3 +68,7 @@ my_variable_name =  "John"
 ```
 
 > Snake Case is the convention the UNV convention
+
+import Support from "@theme/Support";
+
+<Support py js/>
