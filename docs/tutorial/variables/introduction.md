@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Variables
+# Introduction
 
 ## Variables
 
@@ -43,6 +43,7 @@ x =  string(3) # x will be '3'
 y =  number(3) # y will be 3
 ```
 
+<!--
 ## Get the Type
 
 You can get the data type of a variable with the `type()` function.
@@ -54,8 +55,8 @@ x =  5
 y =  "John"
 print(type(x))
 print(type(y))
-# Returns number and string respectivley
 ```
+-->
 
 ## Single or Double Quotes?
 
@@ -66,8 +67,7 @@ x =  "John"
 # is the same as
 x =  'John'
 ```
-
-There's no difference in UNV , **unlike** other languages.
+There's no difference in UNV , unlike other languages.
 
 ## Yes , They are case-sensitive
 
@@ -80,3 +80,7 @@ a =  4
 A =  "Sally"
 #A will not overwrite a
 ```
+
+import Support from "@theme/Support";
+
+<Support py js/>
