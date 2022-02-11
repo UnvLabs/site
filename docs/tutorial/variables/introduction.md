@@ -29,9 +29,9 @@ Don't change the type of variable after they have been set.
 import print from 'standard'
 
 x =  4 # x is of type int
-x =  "Sally"  # x is now of type str
+x =  "Sally"  # x is now a string
 print(x)
-# Bad code
+# This is bad code - hanging the type of varible is NOT good practice
 ```
 
 ## Casting
@@ -43,6 +43,7 @@ x =  string(3) # x will be '3'
 y =  number(3) # y will be 3
 ```
 
+<!--
 ## Get the Type
 
 You can get the data type of a variable with the `type()` function.
@@ -55,6 +56,7 @@ y =  "John"
 print(type(x))
 print(type(y))
 ```
+-->
 
 ## Single or Double Quotes?
 
@@ -65,8 +67,9 @@ x =  "John"
 # is the same as
 x =  'John'
 ```
+There's no difference in UNV , unlike other languages.
 
-## Case-Sensitive
+## Yes , They are case-sensitive
 
 Variable names are case-sensitive.
 
@@ -81,4 +84,3 @@ A =  "Sally"
 import Support from "@theme/Support";
 
 <Support py js/>
-

@@ -4,8 +4,22 @@ sidebar_position: 1
 
 # Why Unv?
 
-> I had learned many programming languages. This is my attempt to create a unique one for any platform.
->
-> _Kavindu Santhusa (Creater)_
+We can't use one langauge for everything. Unv is a attempt to make a simple one for this purpose.With simple syntax similar to python , it can be used for any task.
+**It can be compiled to:**
 
-Currently Unv is in development.
+- JS
+- Python
+- _More to come_
+  **It can be used for:**
+- Web
+- IOT
+- pretty much anything else
+  **Here's a taste of UNV :**
+
+```py
+import 'print' from 'standard'
+if 'Unv is awesome!'
+    print('Hello World!')
+```
+
+Currently UNV is under development

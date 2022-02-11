@@ -6,7 +6,10 @@ sidebar_position: 2
 
 ## Variable Names
 
-A variable can have a short name (like x and y) or a more descriptive name (age, carname, total_volume). Rules for Unv variables:
+A variable can have a short name (like x and y) or a more descriptive name (age, carname, total_volume).
+
+> Variable names should be descriptive (age,carname,ect.)
+> **Rules for Unv variables:**
 
 - A variable name must start with a letter or the underscore character
 - A variable name cannot start with a number
@@ -64,7 +67,7 @@ Each word is separated by an underscore character:
 my_variable_name =  "John"
 ```
 
-> Snake Case is recommended.
+> Snake Case is the convention the UNV convention
 
 import Support from "@theme/Support";
 

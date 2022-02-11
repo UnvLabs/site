@@ -6,7 +6,7 @@ sidebar_position: 4
 
 ## Output Variables
 
-The Unv `print` function is often used to output variables.
+The Unv `print` function is often used to output variables and text
 
 To combine both text and a variable, Unv uses the `+` character:
 
