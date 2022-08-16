@@ -53,7 +53,7 @@ function CodeEditor() {
       window.location.hash = encodeURIComponent(doc);
       window.setCode([]);
       try {
-        let parser = new Parser();
+        let parser = new Parser(doc);
         let tojs = new ToJs();
         Import(sucrase)
           .then(({ transform }) => {
