@@ -56,7 +56,7 @@ function CodeEditor() {
         Import(sucrase)
           .then(({ transform }) => {
             let fn = new Function(
-              transform(tojs(doc)), {
+              transform(tojs(doc), {
                 transforms: ["typescript", "imports"],
               }).code
             );
