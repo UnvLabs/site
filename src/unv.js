@@ -11,13 +11,13 @@
 let Token = (/** @type {RegExp} */ re, skip = true) =>
     /**
      *
-     * @this {Parser}
+     * @this {any}
      * @returns
      */
     function () {
         return this.MATCH(
             re,
-            (m) => ({
+            (/** @type {RegExpMatchArray} */ m) => ({
                 token: "any",
                 value: m[0],
                 list: [...m],
@@ -29,7 +29,7 @@ let Token = (/** @type {RegExp} */ re, skip = true) =>
         )
     };
 
-class Parser {
+class BaseParser {
     /** @type {import("./types").State[]} */
     states = [{ input: "", nodes: [], scope: [], level: 0 }]
 
@@ -37,6 +37,7 @@ class Parser {
      * @param {string} input
      */
     constructor(input) {
+        if(!input) throw new TypeError("input is required")
         this.getState().input = input;
     }
 
@@ -109,7 +110,7 @@ class Parser {
     }
 
     /**
-     * @param {keyof Parser} rule
+     * @param {keyof this} rule
      * @param {{
      *   tag?: string | boolean
      *   name?: string
@@ -117,6 +118,7 @@ class Parser {
      * @returns {boolean}
      */
     RULE(rule, { tag, name } = {}) {
+        // @ts-ignore
         return this.GROUP(name || rule, /** @type {?} */ (this[rule]), {
             tag: tag == true ? rule : tag || undefined,
         })
@@ -124,7 +126,7 @@ class Parser {
 
     /**
      * @param {string} name
-     * @param {(parser: Parser) => boolean} fn
+     * @param {(parser: this) => boolean} fn
      * @param {{
      *   tag?: string
      * }} [options]
@@ -216,6 +218,13 @@ class Parser {
         }
     }
 
+    SKIP() {
+        return true
+    }
+
+}
+
+class Parser extends BaseParser {
     SKIP(newline = false) {
         while (
             this.CONSUME("Ws") ||
@@ -228,9 +237,13 @@ class Parser {
         return true
     }
 
-    parse() {
-        this.RULE("Program");
-        return this.getState().nodes[0]
+    /**
+     * @param {string} input
+     */
+    static parse(input) {
+        let parser = new Parser(input);
+        parser.RULE("Program");
+        return parser.getState().nodes[0]
     }
 
     Program() {
@@ -468,7 +481,7 @@ class ToJs {
         if (declarators.length) code = "let " + declarators.join() + ";" + code;
         return code
     }
-    
+
     /**
      * @param {import("./types").Node & {declarators: string[]}} tree
      */
@@ -564,6 +577,24 @@ class ToJs {
     String(tree) {
         return "`" + tree.value.slice(1, -1) + "`"
     }
+
+    /**
+     * @param {import("./types").Node | import("./types").Token | (import("./types").Node | import("./types").Token)[]} node
+     */
+    static visit(node) {
+        let tojs = new ToJs();
+        return tojs.VISIT(node)
+    }
+
+    /**
+     * @param {string} code
+     */
+    static convert(code) {
+        return ToJs.visit(Parser.parse(code))
+    }
 }
 
-export { Parser, ToJs };
+const parse = Parser.parse;
+const tojs = ToJs.convert;
+
+export { BaseParser, Parser, ToJs, Token, parse, tojs };

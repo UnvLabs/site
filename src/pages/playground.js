@@ -7,7 +7,7 @@ import styles from "./playground.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import { format as prettyFormat } from "pretty-format";
 import { Parser } from "../unv";
-import { ToJs } from "../unv";
+import { tojs } from "../unv";
 
 let sucrase =
   "https://cdn.skypack.dev/pin/sucrase@v3.20.3-gZX9cgIr2LXp7bQ6YAVm/mode=imports,min/optimized/sucrase.js";
@@ -53,12 +53,10 @@ function CodeEditor() {
       window.location.hash = encodeURIComponent(doc);
       window.setCode([]);
       try {
-        let parser = new Parser(doc);
-        let tojs = new ToJs();
         Import(sucrase)
           .then(({ transform }) => {
             let fn = new Function(
-              transform(tojs.VISIT(parser.parse()), {
+              transform(tojs(doc)), {
                 transforms: ["typescript", "imports"],
               }).code
             );
