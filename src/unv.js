@@ -37,7 +37,7 @@ class BaseParser {
      * @param {string} input
      */
     constructor(input) {
-        if(!input) throw new TypeError("input is required")
+        if (!input) throw new TypeError("input is required")
         this.getState().input = input;
     }
 
@@ -100,12 +100,25 @@ class BaseParser {
     /**
      * @param {string} name
      * @param {RegExp|string} re
+     * @param {{
+     *   matcher?: (token:import("./types").Token) => boolean
+     *   save?: (token:import("./types").Token) => void
+     *   tag?: string
+     * }} options
      */
-    TOKEN(name, re = name) {
+    TOKEN(name, re = name, { tag, matcher, save } = {}) {
+        this.newState();
+        // @ts-ignore
+        this.SKIP();
         let token = this.MATCH(re);
+        let state = this.removeState();
         if (!token) return false
+        if (matcher && !matcher(token)) return false
         token.token = name;
-        this.getState().nodes.push(token);
+        token.tag = tag;
+        save?.(token);
+        state.nodes.push(token);
+        this.mergeState(state);
         return true
     }
 
@@ -211,7 +224,6 @@ class BaseParser {
         let state = this.getState();
         // @ts-ignore
         let m = state.input.match(new RegExp(`^(?:${re.source || re})`));
-
         if (m) {
             state.input = state.input.slice(m[0].length);
             return matcher(m)
@@ -221,7 +233,6 @@ class BaseParser {
     SKIP() {
         return true
     }
-
 }
 
 class Parser extends BaseParser {
@@ -243,22 +254,28 @@ class Parser extends BaseParser {
     static parse(input) {
         let parser = new Parser(input);
         parser.RULE("Program");
+        if (parser.getState().input) throw new Error("Failed to parse input.")
         return parser.getState().nodes[0]
     }
 
     Program() {
-        while (
-            ((this.SKIP(true), true) && this.RULE("ForStat")) ||
-            this.RULE("IfStat") ||
-            this.RULE("ExprStat")
-        ) {}
+        while (this.Statement()) {}
         return true
+    }
+
+    Statement() {
+        return (
+            ((this.SKIP(true), true) && this.RULE("ForStat")) ||
+            this.RULE("AssignStat") ||
+            this.RULE("ComplexStat") ||
+            this.RULE("ExprStat")
+        )
     }
 
     Block() {
         return (
             this.CONSUME("Newline") &&
-            this.MANY(() => this.CONSUME("Indent") && this.RULE("ExprStat"))
+            this.MANY(() => this.CONSUME("Indent") && this.Statement())
         )
     }
 
@@ -296,20 +313,34 @@ class Parser extends BaseParser {
             return { declarators }
     }
 
-    IfStat() {
+    ComplexStat() {
         return (
-            this.TOKEN("if") &&
-            this.RULE("ExprList", { name: "Test" }) &&
+            this.TOKEN("ComplexToken", /if|else|switch|catch|do|while/) &&
+            this.OP(() => this.RULE("ExprList", { name: "Test" })) &&
             this.RULE("Block")
         )
     }
 
     ExprStat() {
-        return this.RULE("ExprList") && (this.EOF() || this.CONSUME("Newline"))
+        return (
+            this.RULE("ExprList") &&
+            this.OP(() => this.SKIP()) &&
+            (this.EOF() || this.CONSUME("Newline"))
+        )
+    }
+
+    AssignStat() {
+        return (
+            this.MANY(() => this.RULE("AssignExpr")) &&
+            this.RULE("ExprList") &&
+            this.OP(() => this.SKIP()) &&
+            (this.EOF() || this.CONSUME("Newline"))
+        )
     }
 
     AssignExpr() {
         let expr = false;
+        let id = "";
         /**
          * @type {string[]}
          */
@@ -320,33 +351,51 @@ class Parser extends BaseParser {
                 declarators.push(name);
             }
         };
-        while (true) {
-            /**
-             * @type {string}
-             */
-            let id = "";
-            this.CONSUME("Id", { save: (token) => (id = token.value) });
-            if (this.TOKEN("Assign", "=")) {
-                if (id) declare(id);
-                return { declarators }
-            }
-            if (this.TOKEN("Comma", ",")) {
-                if (id) declare(id);
-                expr = false;
-                continue
-            }
-            if (!this.SimpleExpr()) {
-                return false
-            }
-            expr = true;
-        }
+        if (
+            this.MANY(
+                () => {
+                    return (
+                        this.CONSUME("Id", {
+                            save: (token) => {
+                                id = token.value;
+                            },
+                            tag: "var",
+                        }) ||
+                        this.TOKEN("Comma", ",", {
+                            save: () => {
+                                if (id) declare(id);
+                                id = "";
+                                expr = false;
+                            },
+                        }) ||
+                        (expr = this.SimpleExpr())
+                    )
+                },
+                {
+                    required: true,
+                    gate: () => {
+                        this.newState();
+                        let result = !this.TOKEN("Assign", "=");
+                        this.removeState();
+                        return result
+                    },
+                }
+            ) &&
+            this.TOKEN("Assign", "=", {
+                save: () => {
+                    if (id) declare(id);
+                },
+            })
+        )
+            return { declarators }
     }
 
     ExprList() {
-        return this.MANY(() => this.RULE("AssignExpr") || this.SimpleExpr(), {
+        return this.MANY(() => this.SimpleExpr(), {
             required: true,
             gate: () => {
                 this.newState();
+                this.SKIP();
                 let result = !this.EOF() && !this.CONSUME("Newline");
                 this.removeState();
                 return result
@@ -448,7 +497,33 @@ class ToJs {
      * @param {import("./types").Node & {declarators: string[]}} tree
      */
     AssignExpr(tree) {
-        return [tree.declarators, this.TOSTR(tree)]
+        return [tree.declarators, "[" + tree.nodes.map(node => {
+            if (node.token == "Assign") return "]="
+            return this.TOSTR(node)
+        }, this).join("")]
+    }
+
+    /**
+     * @param {import("./types").Node} tree
+     */
+    AssignStat(tree) {
+        /**
+         * @type {string[]}
+         */
+        let declarators = [];
+        let code = tree.nodes
+            .map((node) => {
+                // @ts-ignore
+                if (node.rule == "AssignExpr") {
+                    let [decls, code] = this.AssignExpr(node);
+                    declarators.push(...decls);
+                    return code
+                }
+                return this.TOSTR(node)
+            })
+            .join("");
+        if (declarators.length) code = "let " + declarators.join() + ";" + code;
+        return code
     }
 
     Program = this.TOSTR
@@ -497,7 +572,7 @@ class ToJs {
         ]
     }
 
-    IfStat = this.TOSTR
+    ComplexStat = this.TOSTR
 
     /**
      * @param {import("./types").Node} tree
@@ -528,31 +603,7 @@ class ToJs {
         return code
     }
 
-    /**
-     * @param {import("./types").Node} tree
-     */
-    ExprList(tree) {
-        /**
-         * @type {string[]}
-         */
-        let declarators = [];
-        let code = tree.nodes
-            .map((node) => {
-                // @ts-ignore
-                if (node.rule == "AssignExpr") {
-                    // @ts-ignore
-                    let [decls, code] = this.AssignExpr(node);
-                    declarators = declarators.concat(decls);
-                    return code
-                }
-                return this.VISIT_SINGLE(node)
-            })
-            .join("");
-
-        if (declarators.length) code = "let " + declarators.join() + ";" + code;
-
-        return code
-    }
+    ExprList = this.TOSTR
 
     Indent() {
         return ""
