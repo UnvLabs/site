@@ -76,7 +76,7 @@ function CodeEditor() {
       state: EditorState.create({
         doc:
           decodeURIComponent(window.location.hash.slice(1)) ||
-          `import print from 'standard'
+          `import print from 'stdio'
 
 if 'Unv is awesome!'
     print('Hello World!')
