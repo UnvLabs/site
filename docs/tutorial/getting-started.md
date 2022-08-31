@@ -14,6 +14,10 @@ Open your web browser, navigate to the [playground](/playground). Delete all the
 print("Hello, World!")
 ```
 
+:::tip
+Here you can ommit `import print from 'stdio'` as playground imports it automatically.
+:::
+
 The output should read:
 
 ```

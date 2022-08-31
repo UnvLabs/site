@@ -27,6 +27,6 @@ if 'Unv is awesome!'
     print('Hello World!')
 ```
 
-::: info
+:::info
 Currently UNV is under development
 :::

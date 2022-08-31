@@ -35,11 +35,3 @@ Unv is a new programming language. Created by Kavindu Santhusa.
 
 - Unv is in development. You can help us to develop it.
 - You can use text editor or online/offline IDE to write Unv.
-
-**Example**
-
-```py
-import print from 'standard'
-
-print("Hello, World!")
-```
