@@ -73,7 +73,7 @@ Since strings are arrays, we can loop through the characters in a string, with a
 
 Loop through the letters in the word "banana":
 ```py
-for  x  in  "banana":  
+for  x  in  "banana"  
     print(x)
 ```
 
