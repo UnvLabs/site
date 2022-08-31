@@ -235,7 +235,23 @@ class BaseParser {
     }
 }
 
-class Parser extends BaseParser {
+class Tokenizer extends BaseParser {
+    JsBlockComment = Token(/\/\*[^]*?\*\//, false)
+    JsLineComment = Token(/\/\/.*/, false)
+    BlockComment = Token(/###([^]*?)###/, false)
+    LineComment = Token(/#(.*)/, false)
+    Number = Token(/[\d_]+(\.[\d_]+)?([eE][+-]?[0-9_]+)?/)
+    String = Token(/"(?:\\["\\]|[^"\\])*"|'(?:\\['\\]|[^'\\])*'/)
+    Newline = Token(/\n/, false)
+    Ws = Token(/[ \t]+/, false)
+    Id = Token(/\w[\w\d]*/)
+    Punc = Token(/[~!@#$%^&*()_+=\-[\]\\{}|;:,./<>?]/)
+    EOF() {
+        return this.getState().input.length === 0
+    }
+}
+
+class Parser extends Tokenizer {
     SKIP(newline = false) {
         while (
             this.CONSUME("Ws") ||
@@ -265,10 +281,12 @@ class Parser extends BaseParser {
 
     Statement() {
         return (
-            ((this.SKIP(true), true) && this.RULE("ForStat")) ||
-            this.RULE("AssignStat") ||
-            this.RULE("ComplexStat") ||
-            this.RULE("ExprStat")
+            (this.SKIP(true), true) &&
+            (this.RULE("ForStat") ||
+                this.RULE("AssignStat") ||
+                this.RULE("ComplexStat") ||
+                this.RULE("ImportStat") ||
+                this.RULE("ExprStat"))
         )
     }
 
@@ -329,12 +347,40 @@ class Parser extends BaseParser {
         )
     }
 
-    AssignStat() {
+    ImportStat() {
         return (
-            this.MANY(() => this.RULE("AssignExpr")) &&
-            this.RULE("ExprList") &&
+            this.TOKEN("Import", "import") &&
+            this.MANY(() => this.SimpleExpr(), {
+                gate: () => {
+                    this.newState();
+                    this.SKIP();
+                    let result =
+                        !this.EOF() &&
+                        !this.CONSUME("Newline") &&
+                        !this.TOKEN("From", "from");
+                    this.removeState();
+                    return result
+                },
+                required: true,
+            }) &&
+            this.TOKEN("From", "from") &&
+            this.CONSUME("String", { tag: "import_string" }) &&
+            this.EndStat()
+        )
+    }
+
+    EndStat() {
+        return (
             this.OP(() => this.SKIP()) &&
             (this.EOF() || this.CONSUME("Newline"))
+        )
+    }
+
+    AssignStat() {
+        return (
+            this.MANY(() => this.RULE("AssignExpr"), { required: true }) &&
+            this.RULE("ExprList") &&
+            this.EndStat()
         )
     }
 
@@ -443,20 +489,6 @@ class Parser extends BaseParser {
             hidden: true,
         }
     }
-
-    JsBlockComment = Token(/\/\*[^]*?\*\//, false)
-    JsLineComment = Token(/\/\/.*/, false)
-    BlockComment = Token(/###([^]*?)###/, false)
-    LineComment = Token(/#(.*)/, false)
-    Number = Token(/[\d_]+(\.[\d_]+)?([eE][+-]?[0-9_]+)?/)
-    String = Token(/"(?:\\["\\]|[^"\\])*"|'(?:\\['\\]|[^'\\])*'/)
-    Newline = Token(/\n/, false)
-    Ws = Token(/[ \t]+/, false)
-    Id = Token(/\w[\w\d]*/)
-    Punc = Token(/[~!@#$%^&*()_+=\-[\]\\{}|;:,./<>?]/)
-    EOF() {
-        return this.getState().input.length === 0
-    }
 }
 
 class ToJs {
@@ -497,10 +529,16 @@ class ToJs {
      * @param {import("./types").Node & {declarators: string[]}} tree
      */
     AssignExpr(tree) {
-        return [tree.declarators, "[" + tree.nodes.map(node => {
-            if (node.token == "Assign") return "]="
-            return this.TOSTR(node)
-        }, this).join("")]
+        return [
+            tree.declarators,
+            "[" +
+                tree.nodes
+                    .map((node) => {
+                        if (node.token == "Assign") return "]="
+                        return this.TOSTR(node)
+                    }, this)
+                    .join(""),
+        ]
     }
 
     /**
@@ -557,6 +595,18 @@ class ToJs {
         return code
     }
 
+    /**
+     * @param {import("./types").Node} tree
+     */
+    ImportStat(tree) {
+        return tree.nodes
+            .map((node) => {
+                if (node.token == "Import") return "import{"
+                if (node.token == "From") return "}from"
+                return this.TOSTR(node)
+            })
+            .join("")
+    }
     /**
      * @param {import("./types").Node & {declarators: string[]}} tree
      */
