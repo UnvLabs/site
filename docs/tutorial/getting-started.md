@@ -15,7 +15,7 @@ print("Hello, World!")
 ```
 
 :::tip
-Here you can ommit `import print from 'stdio'` as playground imports it automatically.
+Here you can ommit `import print from '@std/io'` as playground imports it automatically.
 :::
 
 The output should read:

@@ -41,13 +41,20 @@ function CodeEditor() {
       print,
     };
 
+    let importmap = {
+      "@std": {
+        io: { print },
+        random: { random: Math.random.bind(Math) },
+      },
+    };
+
     window.require = (path) => {
-      return {
-        standard,
-        stdio: {
-          print,
-        },
-      }[path];
+      return path.split("/").reduce((p, c) => {
+        if (c in p) return p[c];
+        throw new TypeError(
+          `Imported module ${JSON.stringify(path)} is missing.`
+        );
+      });
     };
 
     Object.assign(window, standard);
@@ -76,7 +83,7 @@ function CodeEditor() {
       state: EditorState.create({
         doc:
           decodeURIComponent(window.location.hash.slice(1)) ||
-          `import print from 'stdio'
+          `import print from '@std/io'
 
 if 'Unv is awesome!'
     print('Hello World!')
