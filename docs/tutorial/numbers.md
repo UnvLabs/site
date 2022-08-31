@@ -102,3 +102,7 @@ print(d)
 ## Random Number
 TODO
 -->
+
+import Support from "@theme/Support";
+
+<Support py js/>

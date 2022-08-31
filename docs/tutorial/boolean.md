@@ -86,3 +86,7 @@ x =  200
 print(isinstance(x, number))
 ```
 -->
+
+import Support from "@theme/Support";
+
+<Support py js/>

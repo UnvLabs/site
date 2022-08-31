@@ -56,3 +56,8 @@ Example|Data Type
 <!--
 ## Setting the Specific Data Type
 -->
+
+import Support from "@theme/Support";
+
+<Support py js/>
+**Complex numbers are not supported in JavaScript.**
