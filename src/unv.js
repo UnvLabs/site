@@ -531,10 +531,9 @@ class ToJs {
     AssignExpr(tree) {
         return [
             tree.declarators,
-            "[" +
                 tree.nodes
                     .map((node) => {
-                        if (node.token == "Assign") return "]="
+                        if (node.token == "Assign") return "="
                         return this.TOSTR(node)
                     }, this)
                     .join(""),
