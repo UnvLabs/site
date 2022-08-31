@@ -44,6 +44,9 @@ function CodeEditor() {
     window.require = (path) => {
       return {
         standard,
+        stdio: {
+          print,
+        },
       }[path];
     };
 
