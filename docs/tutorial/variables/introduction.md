@@ -14,9 +14,7 @@ Unv has no command for declaring a variable.
 
 A variable is created the moment you first assign a value to it.
 
-```py
-import print from 'standard'
-
+```py {1,2}
 x =  5
 y =  "John"
 print(x)
@@ -25,9 +23,7 @@ print(y)
 
 Don't change the type of variable after they have been set.
 
-```py
-import print from 'standard'
-
+```py {2}
 x =  4 # x is of type int
 x =  "Sally"  # x is now a string
 print(x)
@@ -62,7 +58,7 @@ print(type(y))
 
 String variables can be declared either by using single or double quotes:
 
-```py
+```py {1,3}
 x =  "John"
 # is the same as
 x =  'John'

@@ -8,9 +8,7 @@ sidebar_position: 3
 
 Unv allows you to assign values to multiple variables in one line:
 
-```py
-import print from 'standard'
-
+```py {1}
 x, y, z =  "Orange",  "Banana",  "Cherry"
 print(x)
 print(y)
@@ -23,9 +21,7 @@ print(z)
 
 And you can assign the _same_ value to multiple variables in one line:
 
-```py
-import print from 'standard'
-
+```py {1}
 x = y = z =  "Orange"
 print(x)
 print(y)
@@ -38,11 +34,9 @@ If you have a collection of values in a list, tuple etc. Unv allows you extract 
 
 Unpack a list:
 
-```py
-import print from 'standard'
-
+```py {2}
 fruits = ["apple",  "banana",  "cherry"]
-x, y, z = fruits
+x, y, z = ...fruits
 print(x)
 print(y)
 print(z)
