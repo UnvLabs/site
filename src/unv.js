@@ -241,6 +241,7 @@ class Tokenizer extends BaseParser {
     BlockComment = Token(/###([^]*?)###/, false)
     LineComment = Token(/#(.*)/, false)
     Number = Token(/[\d_]+(\.[\d_]+)?([eE][+-]?[0-9_]+)?/)
+    Complex = Token(/[\d_]+(\.[\d_]+)?([eE][+-]?[0-9_]+)?[ij]/)
     String = Token(/"(?:\\["\\]|[^"\\])*"|'(?:\\['\\]|[^'\\])*'/)
     Newline = Token(/\n/, false)
     Ws = Token(/[ \t]+/, false)
@@ -260,7 +261,7 @@ class Parser extends Tokenizer {
             this.CONSUME("JsLineComment") ||
             this.CONSUME("JsBlockComment") ||
             (newline ? this.CONSUME("Newline") : false)
-        ) {}
+        ) { }
         return true
     }
 
@@ -275,7 +276,7 @@ class Parser extends Tokenizer {
     }
 
     Program() {
-        while (this.Statement()) {}
+        while (this.Statement()) { }
         return true
     }
 
@@ -292,7 +293,7 @@ class Parser extends Tokenizer {
 
     Block() {
         return (
-            this.CONSUME("Newline") &&
+            this.SKIP() && this.CONSUME("Newline") &&
             this.MANY(() => this.CONSUME("Indent") && this.Statement())
         )
     }
@@ -302,7 +303,9 @@ class Parser extends Tokenizer {
             this.TOKEN("for") &&
             this.GROUP(
                 "Test",
-                () => this.RULE("ForArgs") && this.RULE("ExprList")
+                () =>
+                    this.RULE("ForArgs") &&
+                    this.RULE("ExprList")
             ) &&
             this.RULE("Block")
         )
@@ -470,7 +473,7 @@ class Parser extends Tokenizer {
             this.CONSUME("JsLineComment") ||
             this.CONSUME("JsBlockComment") ||
             this.CONSUME("Newline")
-        ) {}
+        ) { }
 
         if (!token) return false
         // @ts-ignore
@@ -531,12 +534,12 @@ class ToJs {
     AssignExpr(tree) {
         return [
             tree.declarators,
-                tree.nodes
-                    .map((node) => {
-                        if (node.token == "Assign") return "="
-                        return this.TOSTR(node)
-                    }, this)
-                    .join(""),
+            tree.nodes
+                .map((node) => {
+                    if (node.token == "Assign") return "="
+                    return this.TOSTR(node)
+                }, this)
+                .join(""),
         ]
     }
 
