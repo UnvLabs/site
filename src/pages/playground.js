@@ -52,10 +52,9 @@ function CodeEditor() {
       return path.split("/").reduce((p, c) => {
         if (c[p]) return p[c];
         throw new TypeError(
-          `Imported module ${JSON.stringify(path)} is missing.`,
-          importmap
+          `Imported module ${JSON.stringify(path)} is missing.`
         );
-      });
+      }, importmap);
     };
 
     Object.assign(window, standard);
