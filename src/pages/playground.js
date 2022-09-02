@@ -50,7 +50,7 @@ function CodeEditor() {
 
     window.require = (path) => {
       return path.split("/").reduce((p, c) => {
-        if (c[p]) return p[c];
+        if (p[c]) return p[c];
         throw new TypeError(
           `Imported module ${JSON.stringify(path)} is missing.`
         );
