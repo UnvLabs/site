@@ -123,7 +123,7 @@ x =  200
 print(isinstance(x,  int))
 ``` -->
 
-## Test Yourself With Exercises
+## Exercises
 
 The statement below would print a Boolean value, which one?
 ```py
