@@ -9,7 +9,6 @@ import BrowserOnly from "@docusaurus/BrowserOnly";
 import { format as prettyFormat } from "pretty-format";
 import { Parser } from "../unv";
 import { tojs } from "../unv";
-import useThemeContext from "@theme/hooks/useThemeContext";
 import { oneDark } from "@codemirror/theme-one-dark";
 
 let sucrase =
@@ -21,7 +20,6 @@ function CodeEditor() {
   let [code, setCode] = useState([]);
   window.setCode = setCode;
   window.code = code;
-  const { isDarkTheme } = useThemeContext();
 
   useEffect(() => {
     if (mounted) return;
@@ -100,7 +98,7 @@ if 'Unv is awesome!'
             "&": { height: "40vh" },
             ".cm-scroller": { overflow: "auto" },
           }),
-          isDarkTheme && oneDark,
+          oneDark,
           EditorView.updateListener.of((v) => {
             if (v.docChanged) run(editor.state.doc.toString());
           }),
