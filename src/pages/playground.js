@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState, createRef } from "react";
 import Layout from "@theme/Layout";
 import CodeBlock from "@theme/CodeBlock";
-import {  EditorView, basicSetup } from "codemirror";
+import { EditorView, basicSetup } from "codemirror";
 import { EditorState } from "@codemirror/state";
 import { python } from "@codemirror/lang-python";
 import styles from "./playground.module.css";
@@ -95,7 +95,7 @@ if 'Unv is awesome!'
           basicSetup,
           python(),
           EditorView.theme({
-            "&": { height: "40vh" },
+            "&": { height: "40vh", fontSize: "1rem" },
             ".cm-scroller": { overflow: "auto" },
           }),
           ...oneDark,
