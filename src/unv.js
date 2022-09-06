@@ -246,7 +246,7 @@ class Tokenizer extends BaseParser {
     Newline = Token(/\n/, false)
     Ws = Token(/[ \t]+/, false)
     Id = Token(/\w[\w\d]*/)
-    Punc = Token(/[~!@#$%^&*()_+=\-[\]\\{}|;:,./<>?]/)
+    Punc = Token(/[~!@#$%^&*_+=\-[\]\\{}|;:,./<>?]/)
     EOF() {
         return this.getState().input.length === 0
     }
@@ -261,7 +261,7 @@ class Parser extends Tokenizer {
             this.CONSUME("JsLineComment") ||
             this.CONSUME("JsBlockComment") ||
             (newline ? this.CONSUME("Newline") : false)
-        ) { }
+        ) {}
         return true
     }
 
@@ -276,7 +276,7 @@ class Parser extends Tokenizer {
     }
 
     Program() {
-        while (this.Statement()) { }
+        while (this.Statement()) {}
         return true
     }
 
@@ -285,6 +285,7 @@ class Parser extends Tokenizer {
             (this.SKIP(true), true) &&
             (this.RULE("ForStat") ||
                 this.RULE("AssignStat") ||
+                this.RULE("FuncStat") ||
                 this.RULE("ComplexStat") ||
                 this.RULE("ImportStat") ||
                 this.RULE("ExprStat"))
@@ -293,21 +294,16 @@ class Parser extends Tokenizer {
 
     Block() {
         return (
-            this.SKIP() && this.CONSUME("Newline") &&
+            this.SKIP() &&
+            this.CONSUME("Newline") &&
             this.MANY(() => this.CONSUME("Indent") && this.Statement())
         )
     }
 
     ForStat() {
         return (
-            this.TOKEN("for") &&
-            this.GROUP(
-                "Test",
-                () =>
-                    this.RULE("ForArgs") &&
-                    this.RULE("ExprList")
-            ) &&
-            this.RULE("Block")
+            this.TOKEN("for") && "Test",
+            this.RULE("ForArgs") && this.RULE("ExprList") && this.RULE("Block")
         )
     }
 
@@ -342,9 +338,27 @@ class Parser extends Tokenizer {
         )
     }
 
+    FuncStat() {
+        return (
+            this.TOKEN("Function", "function") &&
+            this.Id() &&
+            this.RULE("ParensExpr", { name: "Params" }) &&
+            this.OP(() => this.SKIP()) &&
+            this.RULE("Block")
+        )
+    }
+
+    ParensExpr() {
+        return (
+            this.TOKEN("LP ", /\(/) &&
+            this.OP(() => this.ExprList() && this.SKIP()) &&
+            this.TOKEN("RP ", /\)/)
+        )
+    }
+
     ExprStat() {
         return (
-            this.RULE("ExprList") &&
+            this.ExprList() &&
             this.OP(() => this.SKIP()) &&
             (this.EOF() || this.CONSUME("Newline"))
         )
@@ -440,7 +454,7 @@ class Parser extends Tokenizer {
     }
 
     ExprList() {
-        return this.MANY(() => this.SimpleExpr(), {
+        return this.MANY(() => this.RULE("ParensExpr") || this.SimpleExpr(), {
             required: true,
             gate: () => {
                 this.newState();
@@ -472,8 +486,8 @@ class Parser extends Tokenizer {
             this.CONSUME("LineComment") ||
             this.CONSUME("JsLineComment") ||
             this.CONSUME("JsBlockComment") ||
-            this.CONSUME("Newline")
-        ) { }
+            this.CONSUME("Newline", { save: () => (token = undefined) })
+        ) {}
 
         if (!token) return false
         // @ts-ignore
@@ -555,6 +569,7 @@ class ToJs {
             .map((node) => {
                 // @ts-ignore
                 if (node.rule == "AssignExpr") {
+                    // @ts-ignore
                     let [decls, code] = this.AssignExpr(node);
                     declarators.push(...decls);
                     return code
@@ -583,13 +598,19 @@ class ToJs {
 
         code += tree.nodes
             .map((node) => {
+                if (node.token == "for") return "for("
                 if (
                     /** @type {import("./types").Node} */ (node).rule ==
                     "ForArgs"
                 ) {
 [declarators, code] = this.VISIT(node);
                     return code
-                } else return this.VISIT(node)
+                }
+                if (
+                    /** @type {import("./types").Node} */ (node).rule == "Block"
+                )
+                    return ")" + this.VISIT(node)
+                return this.VISIT(node)
             })
             .join("");
 
@@ -655,7 +676,10 @@ class ToJs {
         return code
     }
 
+    FuncStat = this.TOSTR
     ExprList = this.TOSTR
+    ParensExpr = this.TOSTR
+    Params = this.TOSTR
 
     Indent() {
         return ""
