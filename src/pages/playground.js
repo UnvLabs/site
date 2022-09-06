@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState, createRef } from "react";
 import Layout from "@theme/Layout";
 import CodeBlock from "@theme/CodeBlock";
-import { EditorState, EditorView, basicSetup } from "@codemirror/basic-setup";
+import { EditorState, EditorView, basicSetup } from "codemirror";
 import { Compartment } from "@codemirror/state";
 import { python } from "@codemirror/lang-python";
 import styles from "./playground.module.css";
