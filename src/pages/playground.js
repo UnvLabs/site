@@ -98,7 +98,7 @@ if 'Unv is awesome!'
             "&": { height: "40vh" },
             ".cm-scroller": { overflow: "auto" },
           }),
-          oneDark,
+          ...oneDark,
           EditorView.updateListener.of((v) => {
             if (v.docChanged) run(editor.state.doc.toString());
           }),
