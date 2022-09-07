@@ -3,6 +3,8 @@ sidebar_position: 11
 ---
 # Operators
 
+import Example from "@theme/Example";
+
 ## Unv Operators
 
 Operators are used to perform operations on variables and values.
@@ -27,9 +29,9 @@ Unv divides the operators in the following groups:
 
 Arithmetic operators are used with numeric values to perform common mathematical operations:
 
-Operator|Name|Example
--|-|-
-`+`|Addition|`x + y`
+Operator|Name|Example|run
+-|-|-|-
+`+`|Addition|`x + y`| <Example>`x + y`</Example>
 `-`|Subtraction|`x - y`
 `*`|Multiplication|`x * y`
 `/`|Division|`x / y`
