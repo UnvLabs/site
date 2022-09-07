@@ -24,6 +24,8 @@ function CodeEditor() {
   useEffect(() => {
     if (mounted) return;
     setMounted(true);
+    let globals = []
+    for(let i in window) {globals.push(i)}
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
     let print = (...args) => {
@@ -67,12 +69,13 @@ function CodeEditor() {
       try {
         Import(sucrase)
           .then(({ transform }) => {
-            let fn = new Function(
-              transform(tojs(doc), {
-                transforms: ["typescript", "imports"],
-              }).code
+            let fn = new Function(...globals,
+              "this = {};" +
+                transform(tojs(doc), {
+                  transforms: ["typescript", "imports"],
+                }).code
             );
-            fn();
+            fn.call({});
           })
           .catch((error) => {
             print(error);
@@ -85,9 +88,7 @@ function CodeEditor() {
       state: EditorState.create({
         doc:
           decodeURIComponent(window.location.hash.slice(1)) ||
-          `import print from '@std/io'
-
-if 'Unv is awesome!'
+          `if 'Unv is awesome!'
     print('Hello World!')
 # keep editing for live results
 `,
