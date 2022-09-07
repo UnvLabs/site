@@ -31,7 +31,7 @@ Arithmetic operators are used with numeric values to perform common mathematical
 
 Operator|Name|Example
 -|-|-
-`+`|Addition|`x + y`| <Example code="x + y"></Example>
+`+`|Addition|`x + y`| <Example code="x + y"/>
 `-`|Subtraction|<Example code="x - y"/>
 `*`|Multiplication|<Example code="x * y"/>
 `/`|Division|<Example code="x / y"/>
