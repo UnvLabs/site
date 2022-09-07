@@ -25,7 +25,7 @@ function CodeEditor() {
     if (mounted) return;
     setMounted(true);
     let globals = []
-    for(let i in window) {globals.push(i)}
+    for (let i in window) { globals.push(i) }
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
     let print = (...args) => {
@@ -70,10 +70,9 @@ function CodeEditor() {
         Import(sucrase)
           .then(({ transform }) => {
             let fn = new Function(...globals,
-              "this = {};" +
-                transform(tojs(doc), {
-                  transforms: ["typescript", "imports"],
-                }).code
+              transform(tojs(doc), {
+                transforms: ["typescript", "imports"],
+              }).code
             );
             fn.call({});
           })
