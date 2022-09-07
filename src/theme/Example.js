@@ -3,8 +3,14 @@ import React from "react";
 
 export default function Example(props) {
   return (
-    <Link to={"/playground#" + encodeURIComponent(props.code)} target="_blank">
-      Try it
-    </Link>
+    <>
+      <code>{props.code}</code>
+      <Link
+        to={"/playground#" + encodeURIComponent(props.code)}
+        target="_blank"
+      >
+        Try it
+      </Link>
+    </>
   );
 }

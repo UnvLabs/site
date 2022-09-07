@@ -29,15 +29,15 @@ Unv divides the operators in the following groups:
 
 Arithmetic operators are used with numeric values to perform common mathematical operations:
 
-Operator|Name|Example|run
--|-|-|-
+Operator|Name|Example
+-|-|-
 `+`|Addition|`x + y`| <Example code="x + y"></Example>
-`-`|Subtraction|`x - y`
-`*`|Multiplication|`x * y`
-`/`|Division|`x / y`
-`%`|Modulus|`x % y`
-`**`|Exponentiation|`x ** y`
-`//`|Floor division|`x // y`
+`-`|Subtraction|<Example code="x - y"/>
+`*`|Multiplication|<Example code="x * y"/>
+`/`|Division|<Example code="x / y"/>
+`%`|Modulus|<Example code="x % y"/>
+`**`|Exponentiation|<Example code="x ** y"/>
+`//`|Floor division|<Example code="x // y"/>
 
 ## Unv Assignment Operators
 
@@ -45,19 +45,19 @@ Assignment operators are used to assign values to variables:
 
 Operator|Example|Same As
 -|-|-
-`=`|`x = 5`|`x = 5`
-`+=`|`x += 3`|`x = x + 3`
-`-=`|`x -= 3`|`x = x - 3`
-`*=`|`x *= 3`|`x = x * 3`
-`/=`|`x /= 3`|`x = x / 3`
-`%=`|`x %= 3`|`x = x % 3`
-`//=`|`x //= 3`|`x = x // 3`
-`**=`|`x **= 3`|`x = x ** 3`
-`&=`|`x &= 3`|`x = x & 3`
-`|=`|`x |= 3`|`x = x | 3`
-`^=`|`x ^= 3`|`x = x ^ 3`
-`>>=`|`x >>= 3`|`x = x >> 3`
-`<<=`|`x <<= 3`|`x = x << 3`
+`=`|`x = 5`|<Example code="x = 5"/>
+`+=`|`x += 3`|<Example code="x = x + 3"/>
+`-=`|`x -= 3`|<Example code="x = x - 3"/>
+`*=`|`x *= 3`|<Example code="x = x * 3"/>
+`/=`|`x /= 3`|<Example code="x = x / 3"/>
+`%=`|`x %= 3`|<Example code="x = x % 3"/>
+`//=`|`x //= 3`|<Example code="x = x // 3"/>
+`**=`|`x **= 3`|<Example code="x = x ** 3"/>
+`&=`|`x &= 3`|<Example code="x = x & 3"/>
+`|=`|`x |= 3`|<Example code="x = x | 3"/>
+`^=`|`x ^= 3`|<Example code="x = x ^ 3"/>
+`>>=`|`x >>= 3`|<Example code="x = x >> 3"/>
+`<<=`|`x <<= 3`|<Example code="x = x << 3"/>
 
 ## Unv Comparison Operators
 
@@ -65,12 +65,12 @@ Comparison operators are used to compare two values:
 
 Operator|Name|Example
 -|-|-
-`==`|Equal|`x == y`
-`!=`|Not equal|`x != y`
-`>`|Greater than|`x > y`
-`<`|Less than|`x < y`
-`>=`|Greater than or equal to|`x >= y`
-`<=`|Less than or equal to|`x <= y`
+`==`|Equal|<Example code="x == y"/>
+`!=`|Not equal|<Example code="x != y"/>
+`>`|Greater than|<Example code="x > y"/>
+`<`|Less than|<Example code="x < y"/>
+`>=`|Greater than or equal to|<Example code="x >= y"/>
+`<=`|Less than or equal to|<Example code="x <= y"/>
 
 ## Unv Logical Operators
 
@@ -78,9 +78,9 @@ Logical operators are used to combine conditional statements:
 
 Operator|Description|Example
 -|-|-
-`and`|Returns True if both statements are true|`x < 5 and x < 10`
-`or`|Returns True if one of the statements is true|`x < 5 or x < 4`
-`not`|Reverse the result, returns False if the result is true|`not(x < 5 and x < 10)`
+`and`|Returns True if both statements are true|<Example code="x < 5 and x < 10"/>
+`or`|Returns True if one of the statements is true|<Example code="x < 5 or x < 4"/>
+`not`|Reverse the result, returns False if the result is true|<Example code="not(x < 5 and x < 10)"/>
 
 ## Unv Identity Operators
 
@@ -88,8 +88,8 @@ Identity operators are used to compare the objects, not if they are equal, but i
 
 Operator|Description|Example
 -|-|-
-`is`|Returns True if both variables are the same object|`x is y`
-`is not`|Returns True if both variables are not the same object|`x is not y`
+`is`|Returns True if both variables are the same object|<Example code="x is y"/>
+`is not`|Returns True if both variables are not the same object|<Example code="x is not y"/>
 
 ## Unv Membership Operators
 
@@ -97,8 +97,8 @@ Membership operators are used to test if a sequence is presented in an object:
 
 Operator|Description|Example
 -|-|-
-`in`|Returns True if a sequence with the specified value is present in the object|`x in y`
-`not in`|Returns True if a sequence with the specified value is not present in the object|`x not in y`
+`in`|Returns True if a sequence with the specified value is present in the object|<Example code="x in y"/>
+`not in`|Returns True if a sequence with the specified value is not present in the object|<Example code="x not in y"/>
 
 ## Unv Bitwise Operators
 
