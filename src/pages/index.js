@@ -16,7 +16,7 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--success button--lg"
-            to="/docs/introduction"
+            to="/docs/tutorial/introduction"
           >
             Why Unv?
           </Link>
