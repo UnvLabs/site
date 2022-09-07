@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Introduction
+# Variables Introduction
 
 ## Variables
 
