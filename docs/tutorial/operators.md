@@ -31,7 +31,7 @@ Arithmetic operators are used with numeric values to perform common mathematical
 
 Operator|Name|Example|run
 -|-|-|-
-`+`|Addition|`x + y`| <Example>`x + y`</Example>
+`+`|Addition|`x + y`| <Example code="x + y"></Example>
 `-`|Subtraction|`x - y`
 `*`|Multiplication|`x * y`
 `/`|Division|`x / y`
@@ -118,5 +118,5 @@ Operator|Name|Description
 Multiply `10` with `5`, and print the result.
 
 ```py
-print(10 5)
+print(10☐5)
 ```
