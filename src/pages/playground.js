@@ -24,10 +24,6 @@ function CodeEditor() {
   useEffect(() => {
     if (mounted) return;
     setMounted(true);
-    let globals = [];
-    for (let i in window) {
-      globals.push(i);
-    }
     let Import = new Function("url", "return import(url)");
     Import(sucrase);
     let print = (...args) => {
@@ -62,7 +58,12 @@ function CodeEditor() {
         );
       }, importmap);
     };
-
+    
+    let globals = new Set(Object.keys(standard));
+    for (let i in window) {
+      globals.add(i);
+    }
+    
     let run = (doc) => {
       window.location.hash = encodeURIComponent(doc);
       window.setCode([]);
@@ -71,7 +72,7 @@ function CodeEditor() {
         Import(sucrase)
           .then(({ transform }) => {
             let fn = new Function(
-              `{${[...globals, Object.keys(standard)]}}`,
+              `{${globals.values()}}`,
               transform(doc, {
                 transforms: ["typescript", "imports"],
               }).code
