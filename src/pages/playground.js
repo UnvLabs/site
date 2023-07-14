@@ -71,8 +71,7 @@ function CodeEditor() {
         Import(sucrase)
           .then(({ transform }) => {
             let fn = new Function(
-              `{${Object.keys(standard)}}`,
-              ...globals,
+              `{${[...globals, Object.keys(standard)]}}`,
               transform(doc, {
                 transforms: ["typescript", "imports"],
               }).code
