@@ -63,8 +63,6 @@ function CodeEditor() {
       }, importmap);
     };
 
-    Object.assign(window, standard);
-
     let run = (doc) => {
       window.location.hash = encodeURIComponent(doc);
       window.setCode([]);
@@ -73,12 +71,12 @@ function CodeEditor() {
         Import(sucrase)
           .then(({ transform }) => {
             let fn = new Function(
-              ...globals,
+              `{...${globals}}`,
               transform(doc, {
                 transforms: ["typescript", "imports"],
               }).code
             );
-            fn.call({});
+            fn.call(standard);
           })
           .catch((error) => {
             print(error);
