@@ -84,7 +84,7 @@ function CodeEditor() {
           // @ts-ignore
           .then(({ transform }) => {
             let fn = new Function(
-              `{${[...globals.values()].filter(/^\w+$/.test)}}`,
+              `{${[...globals.values()].filter(n => /^\w+$/.test(n))}}`,
               transform(doc, {
                 transforms: ["typescript", "imports"],
               }).code.replace('"use strict";', '')
