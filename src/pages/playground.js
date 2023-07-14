@@ -71,12 +71,13 @@ function CodeEditor() {
         Import(sucrase)
           .then(({ transform }) => {
             let fn = new Function(
-              `{...${globals}}`,
+              `{${Object.keys(standard)}}`,
+              ...globals,
               transform(doc, {
                 transforms: ["typescript", "imports"],
               }).code
             );
-            fn.call(standard);
+            fn.call({}, standard);
           })
           .catch((error) => {
             print(error);
