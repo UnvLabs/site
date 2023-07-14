@@ -1,0 +1,18 @@
+.playground {
+  height: 80vh;
+}
+
+.run {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index:1;
+  border-radius: 0;
+}
+
+.preview {
+  width: 100%;
+  height: 40vh;
+  border: 2px solid gray;
+  overflow-y: auto;
+}
